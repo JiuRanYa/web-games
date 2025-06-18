@@ -6,7 +6,7 @@ export interface Tile {
     col: number;
   };
   mergedFrom?: Tile[];
-  isNew?: boolean;
+  isNew: boolean;
 }
 
 // 生成唯一ID的辅助函数
@@ -25,12 +25,12 @@ export function createTile(position: { row: number; col: number }, value: number
 }
 
 // 初始化空网格
-export function createEmptyGrid(): Tile[][] {
+export function createEmptyGrid(): (Tile | null)[][] {
   return Array(4).fill(null).map(() => Array(4).fill(null))
 }
 
 // 在空位置随机生成数字（2或4）
-export function generateNumber(grid: Tile[][]): Tile[][] {
+export function generateNumber(grid: (Tile | null)[][]): (Tile | null)[][] {
   const position = getRandomEmptyPosition(grid)
   if (!position) return grid
   
@@ -45,7 +45,7 @@ export function generateNumber(grid: Tile[][]): Tile[][] {
 }
 
 // 初始化游戏
-export function initializeGame(): Tile[][] {
+export function initializeGame(): (Tile | null)[][] {
   const grid = createEmptyGrid()
   
   // 添加两个初始数字
@@ -62,7 +62,7 @@ export function initializeGame(): Tile[][] {
   return grid
 }
 
-function getRandomEmptyPosition(grid: Tile[][]): { row: number; col: number } | null {
+function getRandomEmptyPosition(grid: (Tile | null)[][]): { row: number; col: number } | null {
   const emptyPositions: { row: number; col: number }[] = []
   
   grid.forEach((row, i) => {
@@ -132,7 +132,7 @@ export function rotateGrid(grid: Tile[][]): Tile[][] {
 }
 
 // 检查是否可以移动
-export function canMove(grid: Tile[][]): boolean {
+export function canMove(grid: (Tile | null)[][]): boolean {
   // 检查是否有空格
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
@@ -159,7 +159,7 @@ export function canMove(grid: Tile[][]): boolean {
 }
 
 // 检查是否胜利（是否有2048）
-export function hasWon(grid: Tile[][]): boolean {
+export function hasWon(grid: (Tile | null)[][]): boolean {
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
       if (grid[i][j]?.value === 2048) return true
@@ -169,8 +169,8 @@ export function hasWon(grid: Tile[][]): boolean {
 }
 
 // 执行移动操作
-export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'): {
-  grid: Tile[][];
+export function move(grid: (Tile | null)[][], direction: 'up' | 'down' | 'left' | 'right'): {
+  grid: (Tile | null)[][];
   score: number;
   moved: boolean;
 } {
@@ -189,22 +189,25 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
     for (let i = 0; i < 4; i++) {
       let column = 0
       for (let j = 1; j < 4; j++) {
-        if (!newGrid[i][j]) continue
+        const tile = newGrid[i][j]
+        if (!tile) continue
         
-        const currentTile = newGrid[i][j]
         let k = j
         
         while (k > column && !newGrid[i][k - 1]) {
           k--
         }
         
-        if (k > column && newGrid[i][k - 1]?.value === currentTile.value) {
+        if (k > column && newGrid[i][k - 1]?.value === tile.value) {
           const targetTile = newGrid[i][k - 1]
+          if (!targetTile) continue
+
           const mergedTile = createTile(
             { row: i, col: k - 1 },
-            currentTile.value * 2
+            tile.value * 2,
+            false
           )
-          mergedTile.mergedFrom = [targetTile, currentTile]
+          mergedTile.mergedFrom = [targetTile, tile]
           
           newGrid[i][k - 1] = mergedTile
           newGrid[i][j] = null
@@ -212,8 +215,8 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
           column = k
           moved = true
         } else if (k !== j) {
-          currentTile.position = { row: i, col: k }
-          newGrid[i][k] = currentTile
+          tile.position = { row: i, col: k }
+          newGrid[i][k] = tile
           newGrid[i][j] = null
           moved = true
         }
@@ -225,22 +228,25 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
     for (let i = 0; i < 4; i++) {
       let column = 3
       for (let j = 2; j >= 0; j--) {
-        if (!newGrid[i][j]) continue
+        const tile = newGrid[i][j]
+        if (!tile) continue
         
-        const currentTile = newGrid[i][j]
         let k = j
         
         while (k < column && !newGrid[i][k + 1]) {
           k++
         }
         
-        if (k < column && newGrid[i][k + 1]?.value === currentTile.value) {
+        if (k < column && newGrid[i][k + 1]?.value === tile.value) {
           const targetTile = newGrid[i][k + 1]
+          if (!targetTile) continue
+
           const mergedTile = createTile(
             { row: i, col: k + 1 },
-            currentTile.value * 2
+            tile.value * 2,
+            false
           )
-          mergedTile.mergedFrom = [targetTile, currentTile]
+          mergedTile.mergedFrom = [targetTile, tile]
           
           newGrid[i][k + 1] = mergedTile
           newGrid[i][j] = null
@@ -248,8 +254,8 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
           column = k
           moved = true
         } else if (k !== j) {
-          currentTile.position = { row: i, col: k }
-          newGrid[i][k] = currentTile
+          tile.position = { row: i, col: k }
+          newGrid[i][k] = tile
           newGrid[i][j] = null
           moved = true
         }
@@ -261,22 +267,25 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
     for (let j = 0; j < 4; j++) {
       let row = 0
       for (let i = 1; i < 4; i++) {
-        if (!newGrid[i][j]) continue
+        const tile = newGrid[i][j]
+        if (!tile) continue
         
-        const currentTile = newGrid[i][j]
         let k = i
         
         while (k > row && !newGrid[k - 1][j]) {
           k--
         }
         
-        if (k > row && newGrid[k - 1][j]?.value === currentTile.value) {
+        if (k > row && newGrid[k - 1][j]?.value === tile.value) {
           const targetTile = newGrid[k - 1][j]
+          if (!targetTile) continue
+
           const mergedTile = createTile(
             { row: k - 1, col: j },
-            currentTile.value * 2
+            tile.value * 2,
+            false
           )
-          mergedTile.mergedFrom = [targetTile, currentTile]
+          mergedTile.mergedFrom = [targetTile, tile]
           
           newGrid[k - 1][j] = mergedTile
           newGrid[i][j] = null
@@ -284,8 +293,8 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
           row = k
           moved = true
         } else if (k !== i) {
-          currentTile.position = { row: k, col: j }
-          newGrid[k][j] = currentTile
+          tile.position = { row: k, col: j }
+          newGrid[k][j] = tile
           newGrid[i][j] = null
           moved = true
         }
@@ -297,22 +306,25 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
     for (let j = 0; j < 4; j++) {
       let row = 3
       for (let i = 2; i >= 0; i--) {
-        if (!newGrid[i][j]) continue
+        const tile = newGrid[i][j]
+        if (!tile) continue
         
-        const currentTile = newGrid[i][j]
         let k = i
         
         while (k < row && !newGrid[k + 1][j]) {
           k++
         }
         
-        if (k < row && newGrid[k + 1][j]?.value === currentTile.value) {
+        if (k < row && newGrid[k + 1][j]?.value === tile.value) {
           const targetTile = newGrid[k + 1][j]
+          if (!targetTile) continue
+
           const mergedTile = createTile(
             { row: k + 1, col: j },
-            currentTile.value * 2
+            tile.value * 2,
+            false
           )
-          mergedTile.mergedFrom = [targetTile, currentTile]
+          mergedTile.mergedFrom = [targetTile, tile]
           
           newGrid[k + 1][j] = mergedTile
           newGrid[i][j] = null
@@ -320,8 +332,8 @@ export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'
           row = k
           moved = true
         } else if (k !== i) {
-          currentTile.position = { row: k, col: j }
-          newGrid[k][j] = currentTile
+          tile.position = { row: k, col: j }
+          newGrid[k][j] = tile
           newGrid[i][j] = null
           moved = true
         }

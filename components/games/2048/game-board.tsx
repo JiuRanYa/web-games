@@ -16,7 +16,7 @@ export interface GameBoardProps {
 }
 
 export function GameBoard({ className }: GameBoardProps) {
-  const [grid, setGrid] = useState<Tile[][]>(createEmptyGrid())
+  const [grid, setGrid] = useState<(Tile | null)[][]>(createEmptyGrid())
   const [score, setScore] = useState<number>(0)
   const [gameOver, setGameOver] = useState<boolean>(false)
   const [won, setWon] = useState<boolean>(false)
