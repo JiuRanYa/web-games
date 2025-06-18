@@ -103,7 +103,7 @@ export function DifficultySettingsModal({
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name && name !== 'difficulty') {
-        const currentDifficulty = getCurrentDifficulty(value)
+        const currentDifficulty = getCurrentDifficulty(value as GameConfig)
         if (currentDifficulty !== form.getValues('difficulty')) {
           form.setValue('difficulty', 'custom')
         }
@@ -113,7 +113,7 @@ export function DifficultySettingsModal({
   }, [form])
 
   const onSubmit = (values: FormData) => {
-    const { difficulty, ...config } = values
+    const { ...config } = values
     onConfigChange(config)
     onOpenChange(false)
   }
