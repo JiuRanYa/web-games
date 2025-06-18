@@ -160,11 +160,14 @@ export function GameBoard({ className }: GameBoardProps) {
         )}
         <div className="relative h-full w-full">
           {/* 背景格子 */}
-          <div className="grid h-full w-full grid-cols-4 gap-2 md:gap-3">
+          <div className="flex flex-wrap h-full w-full">
             {Array(16).fill(null).map((_, i) => (
               <div
                 key={i}
-                className="relative aspect-square rounded-md bg-[#cdc1b4]"
+                className="relative w-[23.4%] aspect-square rounded-md bg-[#cdc1b4]"
+                style={{
+                  margin: '0.8%',
+                }}
               />
             ))}
           </div>

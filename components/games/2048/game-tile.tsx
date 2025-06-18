@@ -37,12 +37,14 @@ interface GameTileProps {
 
 export function GameTile({ tile, className }: GameTileProps) {
   const { value, position, isNew } = tile
+  const tileSize = 23.4 // 与背景格子大小一致
+  const margin = 0.8 // 与背景格子margin一致
   const style = {
-    left: `${position.col * 25}%`,
-    top: `${position.row * 25}%`,
-    width: '25%',
-    height: '25%',
-    transform: `scale(${isNew ? 0 : 0.95})`,
+    left: `${position.col * (tileSize + margin * 2) + margin}%`,
+    top: `${position.row * (tileSize + margin * 2) + margin}%`,
+    width: `${tileSize}%`,
+    height: `${tileSize}%`,
+    transform: `scale(${isNew ? 0 : 1})`,
     transition: 'all 100ms ease-in-out',
     zIndex: 2,
     animation: isNew ? 'tile-pop 200ms ease-in-out forwards' : undefined,
@@ -65,10 +67,10 @@ export function GameTile({ tile, className }: GameTileProps) {
             transform: scale(0);
           }
           50% {
-            transform: scale(1.1);
+            transform: scale(1.05);
           }
           100% {
-            transform: scale(0.95);
+            transform: scale(1);
           }
         }
       `}</style>
