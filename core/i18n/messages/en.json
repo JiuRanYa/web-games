@@ -4,5 +4,9 @@
     "description": "Accessible and customizable components that you can copy and paste into your apps. Free. Open Source. And Next.js 13 Ready.",
     "documentation": "Documentation",
     "github": "GitHub"
+  },
+  "config": {
+    "name": "Web Game",
+    "description": "Web Game is a platform for playing games."
   }
 }
