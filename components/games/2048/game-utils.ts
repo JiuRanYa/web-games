@@ -9,6 +9,14 @@ export interface Tile {
   isNew: boolean;
 }
 
+// 游戏配置
+export const GAME_CONFIG = {
+  FOUR_PROBABILITY: 0, // 生成数字4的概率
+  INITIAL_TILES: 2,    // 初始方块数量
+  GRID_SIZE: 4,        // 网格大小
+  WIN_VALUE: 2048      // 获胜数值
+}
+
 // 生成唯一ID的辅助函数
 function generateId(): string {
   return Math.random().toString(36).substr(2, 9)
@@ -26,7 +34,7 @@ export function createTile(position: { row: number; col: number }, value: number
 
 // 初始化空网格
 export function createEmptyGrid(): (Tile | null)[][] {
-  return Array(4).fill(null).map(() => Array(4).fill(null))
+  return Array(GAME_CONFIG.GRID_SIZE).fill(null).map(() => Array(GAME_CONFIG.GRID_SIZE).fill(null))
 }
 
 // 在空位置随机生成数字（2或4）
@@ -37,7 +45,7 @@ export function generateNumber(grid: (Tile | null)[][]): (Tile | null)[][] {
   const newGrid = grid.map(row => [...row])
   newGrid[position.row][position.col] = createTile(
     position,
-    Math.random() < 0.9 ? 2 : 4,
+    Math.random() < (1 - GAME_CONFIG.FOUR_PROBABILITY) ? 2 : 4,
     true
   )
   
@@ -48,15 +56,15 @@ export function generateNumber(grid: (Tile | null)[][]): (Tile | null)[][] {
 export function initializeGame(): (Tile | null)[][] {
   const grid = createEmptyGrid()
   
-  // 添加两个初始数字
-  const pos1 = getRandomEmptyPosition(grid)
-  if (pos1) {
-    grid[pos1.row][pos1.col] = createTile(pos1, Math.random() < 0.9 ? 2 : 4)
-  }
-  
-  const pos2 = getRandomEmptyPosition(grid)
-  if (pos2) {
-    grid[pos2.row][pos2.col] = createTile(pos2, Math.random() < 0.9 ? 2 : 4)
+  // 添加初始数字
+  for (let i = 0; i < GAME_CONFIG.INITIAL_TILES; i++) {
+    const pos = getRandomEmptyPosition(grid)
+    if (pos) {
+      grid[pos.row][pos.col] = createTile(
+        pos,
+        Math.random() < (1 - GAME_CONFIG.FOUR_PROBABILITY) ? 2 : 4
+      )
+    }
   }
   
   return grid
