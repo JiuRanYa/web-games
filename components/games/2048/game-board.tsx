@@ -16,6 +16,11 @@ export interface GameBoardProps {
   className?: string
 }
 
+interface TouchPosition {
+  x: number;
+  y: number;
+}
+
 export function GameBoard({ className }: GameBoardProps) {
   const t = useTranslations('2048')
   const [grid, setGrid] = useState<(Tile | null)[][]>(createEmptyGrid())
@@ -23,6 +28,7 @@ export function GameBoard({ className }: GameBoardProps) {
   const [gameOver, setGameOver] = useState<boolean>(false)
   const [won, setWon] = useState<boolean>(false)
   const [isInitialized, setIsInitialized] = useState<boolean>(false)
+  const [touchStart, setTouchStart] = useState<TouchPosition | null>(null)
 
   // 在客户端初始化游戏
   useEffect(() => {
@@ -89,6 +95,39 @@ export function GameBoard({ className }: GameBoardProps) {
     row.map((tile, j) => tile ? { ...tile, position: { row: i, col: j } } : null)
   ).filter((tile): tile is Tile => tile !== null)
 
+  const handleTouchStart = useCallback((event: React.TouchEvent) => {
+    const touch = event.touches[0]
+    setTouchStart({
+      x: touch.clientX,
+      y: touch.clientY
+    })
+  }, [])
+
+  const handleTouchEnd = useCallback((event: React.TouchEvent) => {
+    if (!touchStart) return
+
+    const touch = event.changedTouches[0]
+    const deltaX = touch.clientX - touchStart.x
+    const deltaY = touch.clientY - touchStart.y
+    const minDistance = 30 // 最小滑动距离，防止误触
+
+    // 重置触摸起始位置
+    setTouchStart(null)
+
+    // 判断滑动方向
+    if (Math.abs(deltaX) < minDistance && Math.abs(deltaY) < minDistance) {
+      return // 滑动距离太小，忽略
+    }
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // 水平滑动
+      handleMove(deltaX > 0 ? 'right' : 'left')
+    } else {
+      // 垂直滑动
+      handleMove(deltaY > 0 ? 'down' : 'up')
+    }
+  }, [touchStart, handleMove])
+
   const rulesContent = t.raw('accordion.rules.content') as string[]
   const controlsContent = t.raw('accordion.controls.content') as string[]
   const scoringContent = t.raw('accordion.scoring.content') as string[]
@@ -102,11 +141,16 @@ export function GameBoard({ className }: GameBoardProps) {
         <Button onClick={resetGame}>{t('restart')}</Button>
       </div>
       
-      <div className={cn(
-        'relative w-full max-w-[500px] min-w-[280px] aspect-square',
-        'rounded-lg bg-[#bbada0] p-3 md:p-4',
-        className
-      )}>
+      <div 
+        className={cn(
+          'relative w-full max-w-[500px] min-w-[280px] aspect-square',
+          'rounded-lg bg-[#bbada0] p-3 md:p-4',
+          'touch-none', // 防止触摸时出现浏览器默认行为
+          className
+        )}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {(gameOver || won) && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg z-50">
             <div className="text-4xl font-bold text-white">
@@ -155,6 +199,7 @@ export function GameBoard({ className }: GameBoardProps) {
                 {controlsContent.map((control: string, index: number) => (
                   <li key={index}>{control}</li>
                 ))}
+                <li>触摸设备：滑动屏幕控制方向</li>
               </ul>
             </AccordionContent>
           </AccordionItem>

@@ -34,7 +34,8 @@
         "description": "You can move tiles using:",
         "content": [
           "Arrow keys: ↑ ↓ ← →",
-          "WASD keys: W (up) S (down) A (left) D (right)"
+          "WASD keys: W (up) S (down) A (left) D (right)",
+          "Touch devices: Swipe to control direction"
         ]
       },
       "scoring": {
