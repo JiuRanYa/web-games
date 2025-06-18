@@ -31,6 +31,16 @@
       "button": "设置",
       "title": "游戏设置",
       "description": "自定义游戏难度和规则",
+      "difficulty": "难度",
+      "difficultyDesc": "选择预设难度或自定义设置",
+      "selectDifficulty": "选择难度",
+      "difficulties": {
+        "easy": "简单",
+        "normal": "普通",
+        "hard": "困难",
+        "expert": "专家",
+        "custom": "自定义"
+      },
       "fourProbability": "4出现概率",
       "fourProbabilityDesc": "新生成的数字是4的概率（0-1）",
       "initialTiles": "初始方块数",

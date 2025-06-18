@@ -16,12 +16,24 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { GameConfig, DEFAULT_GAME_CONFIG } from './game-utils'
+import { 
+  GameConfig, 
+  DEFAULT_GAME_CONFIG, 
+  Difficulty,
+  DIFFICULTY_PRESETS 
+} from './game-utils'
 import { useTranslations } from 'next-intl'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 
 interface DifficultySettingsModalProps {
   open: boolean
@@ -30,7 +42,12 @@ interface DifficultySettingsModalProps {
   onConfigChange: (config: GameConfig) => void
 }
 
+interface FormData extends GameConfig {
+  difficulty: Difficulty
+}
+
 const configSchema = z.object({
+  difficulty: z.enum(['easy', 'normal', 'hard', 'expert', 'custom'] as const),
   FOUR_PROBABILITY: z.number().min(0).max(1),
   INITIAL_TILES: z.number().min(1).max(6),
   GRID_SIZE: z.number().min(3).max(8),
@@ -44,18 +61,68 @@ export function DifficultySettingsModal({
   onConfigChange
 }: DifficultySettingsModalProps) {
   const t = useTranslations('2048')
-  const form = useForm<GameConfig>({
+  
+  // 根据当前配置判断难度
+  function getCurrentDifficulty(config: GameConfig): Difficulty {
+    for (const [difficulty, preset] of Object.entries(DIFFICULTY_PRESETS)) {
+      if (
+        preset.FOUR_PROBABILITY === config.FOUR_PROBABILITY &&
+        preset.INITIAL_TILES === config.INITIAL_TILES &&
+        preset.GRID_SIZE === config.GRID_SIZE &&
+        preset.WIN_VALUE === config.WIN_VALUE
+      ) {
+        return difficulty as Exclude<Difficulty, 'custom'>
+      }
+    }
+    return 'custom'
+  }
+
+  const form = useForm<FormData>({
     resolver: zodResolver(configSchema),
-    defaultValues: currentConfig,
+    defaultValues: {
+      ...currentConfig,
+      difficulty: getCurrentDifficulty(currentConfig)
+    },
   })
 
-  const onSubmit = (values: GameConfig) => {
-    onConfigChange(values)
+  // 监听难度变化
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'difficulty' && value.difficulty !== 'custom') {
+        const preset = DIFFICULTY_PRESETS[value.difficulty as Exclude<Difficulty, 'custom'>]
+        form.setValue('FOUR_PROBABILITY', preset.FOUR_PROBABILITY)
+        form.setValue('INITIAL_TILES', preset.INITIAL_TILES)
+        form.setValue('GRID_SIZE', preset.GRID_SIZE)
+        form.setValue('WIN_VALUE', preset.WIN_VALUE)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [form])
+
+  // 监听其他配置项变化，更新难度为自定义
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name && name !== 'difficulty') {
+        const currentDifficulty = getCurrentDifficulty(value)
+        if (currentDifficulty !== form.getValues('difficulty')) {
+          form.setValue('difficulty', 'custom')
+        }
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [form])
+
+  const onSubmit = (values: FormData) => {
+    const { difficulty, ...config } = values
+    onConfigChange(config)
     onOpenChange(false)
   }
 
   const resetToDefault = () => {
-    form.reset(DEFAULT_GAME_CONFIG)
+    form.reset({
+      ...DEFAULT_GAME_CONFIG,
+      difficulty: 'normal'
+    })
   }
 
   return (
@@ -69,6 +136,35 @@ export function DifficultySettingsModal({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="difficulty"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('settings.difficulty')}</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('settings.selectDifficulty')} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="easy">{t('settings.difficulties.easy')}</SelectItem>
+                      <SelectItem value="normal">{t('settings.difficulties.normal')}</SelectItem>
+                      <SelectItem value="hard">{t('settings.difficulties.hard')}</SelectItem>
+                      <SelectItem value="expert">{t('settings.difficulties.expert')}</SelectItem>
+                      <SelectItem value="custom">{t('settings.difficulties.custom')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    {t('settings.difficultyDesc')}
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="FOUR_PROBABILITY"

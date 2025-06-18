@@ -16,13 +16,37 @@ export interface GameConfig {
   WIN_VALUE: number;      // 获胜数值
 }
 
-// 默认游戏配置
-export const DEFAULT_GAME_CONFIG: GameConfig = {
-  FOUR_PROBABILITY: 0, // 生成数字4的概率
-  INITIAL_TILES: 2,    // 初始方块数量
-  GRID_SIZE: 4,        // 网格大小
-  WIN_VALUE: 2048      // 获胜数值
+export type Difficulty = 'easy' | 'normal' | 'hard' | 'expert' | 'custom'
+
+export const DIFFICULTY_PRESETS: Record<Exclude<Difficulty, 'custom'>, GameConfig> = {
+  easy: {
+    FOUR_PROBABILITY: 0.0,
+    INITIAL_TILES: 2,
+    GRID_SIZE: 4,
+    WIN_VALUE: 2048
+  },
+  normal: {
+    FOUR_PROBABILITY: 0.1,
+    INITIAL_TILES: 2,
+    GRID_SIZE: 4,
+    WIN_VALUE: 2048
+  },
+  hard: {
+    FOUR_PROBABILITY: 0.3,
+    INITIAL_TILES: 3,
+    GRID_SIZE: 5,
+    WIN_VALUE: 2048
+  },
+  expert: {
+    FOUR_PROBABILITY: 0.4,
+    INITIAL_TILES: 4,
+    GRID_SIZE: 6,
+    WIN_VALUE: 4096
+  }
 }
+
+// 默认游戏配置
+export const DEFAULT_GAME_CONFIG: GameConfig = DIFFICULTY_PRESETS.normal
 
 // 当前游戏配置
 export let GAME_CONFIG: GameConfig = { ...DEFAULT_GAME_CONFIG }
