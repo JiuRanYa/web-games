@@ -11,6 +11,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { useTranslations } from 'next-intl'
+import { DifficultySettingsModal } from './difficulty-settings-modal'
+import { updateGameConfig, GameConfig, DEFAULT_GAME_CONFIG } from './game-utils'
 
 export interface GameBoardProps {
   className?: string
@@ -29,14 +31,33 @@ export function GameBoard({ className }: GameBoardProps) {
   const [won, setWon] = useState<boolean>(false)
   const [isInitialized, setIsInitialized] = useState<boolean>(false)
   const [touchStart, setTouchStart] = useState<TouchPosition | null>(null)
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
+  const [currentConfig, setCurrentConfig] = useState<GameConfig>(DEFAULT_GAME_CONFIG)
 
-  // 在客户端初始化游戏
+  // 在客户端初始化游戏和配置
   useEffect(() => {
     if (!isInitialized) {
+      // 从 localStorage 加载配置
+      const savedConfig = localStorage.getItem('2048_config')
+      if (savedConfig) {
+        const parsedConfig = JSON.parse(savedConfig)
+        setCurrentConfig(parsedConfig)
+        updateGameConfig(parsedConfig)
+      }
+      
       setGrid(initializeGame())
       setIsInitialized(true)
     }
   }, [isInitialized])
+
+  const handleConfigChange = (newConfig: GameConfig) => {
+    setCurrentConfig(newConfig)
+    updateGameConfig(newConfig)
+    // 保存到 localStorage
+    localStorage.setItem('2048_config', JSON.stringify(newConfig))
+    // 重置游戏
+    resetGame()
+  }
 
   const handleMove = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
     if (gameOver || won || !isInitialized) return
@@ -138,7 +159,12 @@ export function GameBoard({ className }: GameBoardProps) {
       <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
       <div className="w-full max-w-[500px] min-w-[280px] flex items-center justify-between px-2">
         <div className="text-2xl font-bold">{t('score')}: {score}</div>
-        <Button onClick={resetGame}>{t('restart')}</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setSettingsOpen(true)}>
+            {t('settings.button')}
+          </Button>
+          <Button onClick={resetGame}>{t('restart')}</Button>
+        </div>
       </div>
       
       <div 
@@ -161,11 +187,13 @@ export function GameBoard({ className }: GameBoardProps) {
         <div className="relative h-full w-full">
           {/* 背景格子 */}
           <div className="flex flex-wrap h-full w-full">
-            {Array(16).fill(null).map((_, i) => (
+            {Array(currentConfig.GRID_SIZE * currentConfig.GRID_SIZE).fill(null).map((_, i) => (
               <div
                 key={i}
-                className="relative w-[23.4%] aspect-square rounded-md bg-[#cdc1b4]"
+                className="relative rounded-md bg-[#cdc1b4]"
                 style={{
+                  width: `${(100 - 0.8 * 2 * currentConfig.GRID_SIZE) / currentConfig.GRID_SIZE}%`,
+                  paddingBottom: `${(100 - 0.8 * 2 * currentConfig.GRID_SIZE) / currentConfig.GRID_SIZE}%`,
                   margin: '0.8%',
                 }}
               />
@@ -230,6 +258,13 @@ export function GameBoard({ className }: GameBoardProps) {
           </AccordionItem>
         </Accordion>
       </div>
+
+      <DifficultySettingsModal
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        currentConfig={currentConfig}
+        onConfigChange={handleConfigChange}
+      />
     </div>
   )
 } 

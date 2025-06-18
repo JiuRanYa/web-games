@@ -9,12 +9,27 @@ export interface Tile {
   isNew: boolean;
 }
 
-// 游戏配置
-export const GAME_CONFIG = {
+export interface GameConfig {
+  FOUR_PROBABILITY: number; // 生成数字4的概率
+  INITIAL_TILES: number;    // 初始方块数量
+  GRID_SIZE: number;        // 网格大小
+  WIN_VALUE: number;      // 获胜数值
+}
+
+// 默认游戏配置
+export const DEFAULT_GAME_CONFIG: GameConfig = {
   FOUR_PROBABILITY: 0, // 生成数字4的概率
   INITIAL_TILES: 2,    // 初始方块数量
   GRID_SIZE: 4,        // 网格大小
   WIN_VALUE: 2048      // 获胜数值
+}
+
+// 当前游戏配置
+export let GAME_CONFIG: GameConfig = { ...DEFAULT_GAME_CONFIG }
+
+// 更新游戏配置
+export function updateGameConfig(newConfig: Partial<GameConfig>) {
+  GAME_CONFIG = { ...GAME_CONFIG, ...newConfig }
 }
 
 // 生成唯一ID的辅助函数
@@ -124,16 +139,17 @@ function pad(row: Tile[], length: number): Tile[] {
 // 移动和合并一行
 export function moveRow(row: Tile[], direction: 'left' | 'right'): [Tile[], number] {
   const [merged, score] = merge(row)
-  const padded = pad(merged, 4)
+  const padded = pad(merged, GAME_CONFIG.GRID_SIZE)
   return [direction === 'left' ? padded : padded.reverse(), score]
 }
 
 // 旋转矩阵（用于上下移动）
 export function rotateGrid(grid: Tile[][]): Tile[][] {
-  const newGrid: Tile[][] = Array(4).fill(null).map(() => Array(4).fill(null))
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      newGrid[i][j] = grid[j][3 - i]
+  const size = GAME_CONFIG.GRID_SIZE
+  const newGrid: Tile[][] = Array(size).fill(null).map(() => Array(size).fill(null))
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      newGrid[i][j] = grid[j][size - 1 - i]
     }
   }
   return newGrid
@@ -141,21 +157,22 @@ export function rotateGrid(grid: Tile[][]): Tile[][] {
 
 // 检查是否可以移动
 export function canMove(grid: (Tile | null)[][]): boolean {
+  const size = GAME_CONFIG.GRID_SIZE
   // 检查是否有空格
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
       if (!grid[i][j]) return true
     }
   }
   
   // 检查是否有相邻的相同数字
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
       const current = grid[i][j]?.value
       if (current) {
         if (
-          (j < 3 && current === grid[i][j + 1]?.value) || // 右
-          (i < 3 && current === grid[i + 1][j]?.value)    // 下
+          (j < size - 1 && current === grid[i][j + 1]?.value) || // 右
+          (i < size - 1 && current === grid[i + 1][j]?.value)    // 下
         ) {
           return true
         }
@@ -166,11 +183,12 @@ export function canMove(grid: (Tile | null)[][]): boolean {
   return false
 }
 
-// 检查是否胜利（是否有2048）
+// 检查是否胜利
 export function hasWon(grid: (Tile | null)[][]): boolean {
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      if (grid[i][j]?.value === 2048) return true
+  const size = GAME_CONFIG.GRID_SIZE
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      if (grid[i][j]?.value === GAME_CONFIG.WIN_VALUE) return true
     }
   }
   return false
@@ -194,9 +212,10 @@ export function move(grid: (Tile | null)[][], direction: 'up' | 'down' | 'left' 
   const newGrid = gridWithoutNew.map(row => [...row])
 
   const moveLeft = () => {
-    for (let i = 0; i < 4; i++) {
+    const size = GAME_CONFIG.GRID_SIZE
+    for (let i = 0; i < size; i++) {
       let column = 0
-      for (let j = 1; j < 4; j++) {
+      for (let j = 1; j < size; j++) {
         const tile = newGrid[i][j]
         if (!tile) continue
         
@@ -233,9 +252,10 @@ export function move(grid: (Tile | null)[][], direction: 'up' | 'down' | 'left' 
   }
 
   const moveRight = () => {
-    for (let i = 0; i < 4; i++) {
-      let column = 3
-      for (let j = 2; j >= 0; j--) {
+    const size = GAME_CONFIG.GRID_SIZE
+    for (let i = 0; i < size; i++) {
+      let column = size - 1
+      for (let j = size - 2; j >= 0; j--) {
         const tile = newGrid[i][j]
         if (!tile) continue
         
@@ -272,9 +292,10 @@ export function move(grid: (Tile | null)[][], direction: 'up' | 'down' | 'left' 
   }
 
   const moveUp = () => {
-    for (let j = 0; j < 4; j++) {
+    const size = GAME_CONFIG.GRID_SIZE
+    for (let j = 0; j < size; j++) {
       let row = 0
-      for (let i = 1; i < 4; i++) {
+      for (let i = 1; i < size; i++) {
         const tile = newGrid[i][j]
         if (!tile) continue
         
@@ -311,9 +332,10 @@ export function move(grid: (Tile | null)[][], direction: 'up' | 'down' | 'left' 
   }
 
   const moveDown = () => {
-    for (let j = 0; j < 4; j++) {
-      let row = 3
-      for (let i = 2; i >= 0; i--) {
+    const size = GAME_CONFIG.GRID_SIZE
+    for (let j = 0; j < size; j++) {
+      let row = size - 1
+      for (let i = size - 2; i >= 0; i--) {
         const tile = newGrid[i][j]
         if (!tile) continue
         
