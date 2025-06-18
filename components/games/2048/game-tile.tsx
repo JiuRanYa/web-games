@@ -17,17 +17,17 @@ const tileColors: Record<number, string> = {
 }
 
 const tileFontSizes: Record<number, string> = {
-  2: 'text-6xl',
-  4: 'text-6xl',
-  8: 'text-6xl',
-  16: 'text-5xl',
-  32: 'text-5xl',
-  64: 'text-5xl',
-  128: 'text-4xl',
-  256: 'text-4xl',
-  512: 'text-4xl',
-  1024: 'text-3xl',
-  2048: 'text-3xl',
+  2: 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
+  4: 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
+  8: 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
+  16: 'text-3xl sm:text-4xl md:text-4xl lg:text-5xl',
+  32: 'text-3xl sm:text-4xl md:text-4xl lg:text-5xl',
+  64: 'text-3xl sm:text-4xl md:text-4xl lg:text-5xl',
+  128: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
+  256: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
+  512: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
+  1024: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
+  2048: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
 }
 
 interface GameTileProps {
