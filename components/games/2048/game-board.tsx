@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { GameTile } from './game-tile'
 import { cn } from '@/lib/utils'
-import { initializeGame, move, generateNumber, canMove, hasWon, createEmptyGrid } from './game-utils'
+import { initializeGame, move, generateNumber, canMove, hasWon, createEmptyGrid, Tile } from './game-utils'
 import { Button } from '@/components/ui/button'
 import {
   Accordion,
@@ -16,7 +16,7 @@ export interface GameBoardProps {
 }
 
 export function GameBoard({ className }: GameBoardProps) {
-  const [grid, setGrid] = useState<number[][]>(createEmptyGrid())
+  const [grid, setGrid] = useState<Tile[][]>(createEmptyGrid())
   const [score, setScore] = useState<number>(0)
   const [gameOver, setGameOver] = useState<boolean>(false)
   const [won, setWon] = useState<boolean>(false)
@@ -82,16 +82,17 @@ export function GameBoard({ className }: GameBoardProps) {
     setIsInitialized(true)
   }, [])
 
+  // 获取所有非空方块
+  const tiles = grid.flatMap((row, i) =>
+    row.map((tile, j) => tile ? { ...tile, position: { row: i, col: j } } : null)
+  ).filter((tile): tile is Tile => tile !== null)
+
   return (
     <div className="flex flex-col items-center gap-4 w-full min-h-screen p-4">
       <h1 className="text-4xl font-bold mb-4">2048</h1>
       <div className="w-full max-w-[500px] min-w-[280px] flex items-center justify-between px-2">
         <div className="text-2xl font-bold">分数: {score}</div>
-        <Button
-          onClick={resetGame}
-        >
-          重新开始
-        </Button>
+        <Button onClick={resetGame}>重新开始</Button>
       </div>
       
       <div className={cn(
@@ -100,23 +101,29 @@ export function GameBoard({ className }: GameBoardProps) {
         className
       )}>
         {(gameOver || won) && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg z-50">
             <div className="text-4xl font-bold text-white">
               {won ? '你赢了！' : '游戏结束！'}
             </div>
           </div>
         )}
-        <div className="grid h-full w-full grid-cols-4 gap-2 md:gap-3">
-          {grid.map((row, i) =>
-            row.map((value, j) => (
+        <div className="relative h-full w-full">
+          {/* 背景格子 */}
+          <div className="grid h-full w-full grid-cols-4 gap-2 md:gap-3">
+            {Array(16).fill(null).map((_, i) => (
               <div
-                key={`${i}-${j}`}
+                key={i}
                 className="relative aspect-square rounded-md bg-[#cdc1b4]"
-              >
-                {value > 0 && <GameTile value={value} />}
-              </div>
-            ))
-          )}
+              />
+            ))}
+          </div>
+          {/* 数字方块 */}
+          {tiles.map(tile => (
+            <GameTile
+              key={tile.id}
+              tile={tile}
+            />
+          ))}
         </div>
       </div>
 

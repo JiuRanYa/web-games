@@ -1,5 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
+import type { Tile } from './game-utils'
 
 const tileColors: Record<number, string> = {
   2: 'bg-[#eee4da] text-[#776e65]',
@@ -30,17 +31,30 @@ const tileFontSizes: Record<number, string> = {
 }
 
 interface GameTileProps {
-  value: number
-  className?: string
+  tile: Tile;
+  className?: string;
 }
 
-export function GameTile({ value, className }: GameTileProps) {
+export function GameTile({ tile, className }: GameTileProps) {
+  const { value, position } = tile
+  const style = {
+    left: `${position.col * 25}%`,
+    top: `${position.row * 25}%`,
+    width: '25%',
+    height: '25%',
+    transform: 'scale(0.95)',
+    transition: 'all 100ms ease-in-out',
+    zIndex: 2,
+  }
+
   return (
     <div
+      style={style}
       className={cn(
-        'absolute inset-0 flex items-center justify-center rounded-md font-bold',
+        'absolute flex items-center justify-center rounded-md font-bold',
         tileColors[value] || 'bg-[#3c3a32] text-white',
         tileFontSizes[value] || 'text-3xl',
+        'transition-all duration-100 ease-in-out',
         className
       )}
     >
