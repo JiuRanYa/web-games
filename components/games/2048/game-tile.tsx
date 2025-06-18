@@ -17,17 +17,17 @@ const tileColors: Record<number, string> = {
 }
 
 const tileFontSizes: Record<number, string> = {
-  2: 'text-5xl xs:text-6xl sm:text-6xl md:text-6xl lg:text-6xl',
-  4: 'text-5xl xs:text-6xl sm:text-6xl md:text-6xl lg:text-6xl',
-  8: 'text-5xl xs:text-6xl sm:text-6xl md:text-6xl lg:text-6xl',
-  16: 'text-4xl xs:text-5xl sm:text-5xl md:text-5xl lg:text-5xl',
-  32: 'text-4xl xs:text-5xl sm:text-5xl md:text-5xl lg:text-5xl',
-  64: 'text-4xl xs:text-5xl sm:text-5xl md:text-5xl lg:text-5xl',
-  128: 'text-3xl xs:text-4xl sm:text-4xl md:text-4xl lg:text-4xl',
-  256: 'text-3xl xs:text-4xl sm:text-4xl md:text-4xl lg:text-4xl',
-  512: 'text-3xl xs:text-4xl sm:text-4xl md:text-4xl lg:text-4xl',
-  1024: 'text-2xl xs:text-3xl sm:text-3xl md:text-3xl lg:text-3xl',
-  2048: 'text-2xl xs:text-3xl sm:text-3xl md:text-3xl lg:text-3xl',
+  2: 'text-4xl xs:text-5xl sm:text-6xl md:text-6xl lg:text-6xl',
+  4: 'text-4xl xs:text-5xl sm:text-6xl md:text-6xl lg:text-6xl',
+  8: 'text-4xl xs:text-5xl sm:text-6xl md:text-6xl lg:text-6xl',
+  16: 'text-3xl xs:text-4xl sm:text-5xl md:text-5xl lg:text-5xl',
+  32: 'text-3xl xs:text-4xl sm:text-5xl md:text-5xl lg:text-5xl',
+  64: 'text-3xl xs:text-4xl sm:text-5xl md:text-5xl lg:text-5xl',
+  128: 'text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-4xl',
+  256: 'text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-4xl',
+  512: 'text-2xl xs:text-3xl sm:text-4xl md:text-4xl lg:text-4xl',
+  1024: 'text-xl xs:text-2xl sm:text-3xl md:text-3xl lg:text-3xl',
+  2048: 'text-xl xs:text-2xl sm:text-3xl md:text-3xl lg:text-3xl',
 }
 
 interface GameTileProps {
