@@ -26,8 +26,8 @@ const tileFontSizes: Record<number, string> = {
   128: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
   256: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
   512: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
-  1024: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
-  2048: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
+  1024: 'text-2xl sm:text-2xl md:text-2xl lg:text-3xl',
+  2048: 'text-2xl sm:text-2xl md:text-2xl lg:text-3xl',
 }
 
 interface GameTileProps {
