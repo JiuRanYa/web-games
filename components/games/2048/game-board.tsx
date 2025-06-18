@@ -4,6 +4,12 @@ import { GameTile } from './game-tile'
 import { cn } from '@/lib/utils'
 import { initializeGame, move, generateNumber, canMove, hasWon, createEmptyGrid } from './game-utils'
 import { Button } from '@/components/ui/button'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 export interface GameBoardProps {
   className?: string
@@ -112,6 +118,58 @@ export function GameBoard({ className }: GameBoardProps) {
             ))
           )}
         </div>
+      </div>
+
+      <div className="w-full max-w-[500px] min-w-[280px] mt-8">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="rules">
+            <AccordionTrigger>游戏规则是什么？</AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>在 4x4 的网格上移动数字方块</li>
+                <li>相同数字的方块相撞时会合并成为它们的和</li>
+                <li>每次移动后，会在空位置随机生成一个 2 或 4</li>
+                <li>当出现 2048 方块时获胜</li>
+                <li>当无法继续移动时游戏结束</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="controls">
+            <AccordionTrigger>如何操作游戏？</AccordionTrigger>
+            <AccordionContent>
+              <p className="mb-2">你可以使用以下方式移动方块：</p>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>方向键：↑ ↓ ← →</li>
+                <li>WASD 键：W（上）S（下）A（左）D（右）</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="scoring">
+            <AccordionTrigger>如何计算分数？</AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>每次方块合并时，得分等于合并后的数字</li>
+                <li>例如：2+2=4，得分 4 分</li>
+                <li>4+4=8，得分 8 分</li>
+                <li>分数会持续累加，直到游戏结束</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="strategy">
+            <AccordionTrigger>有什么游戏技巧？</AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>尽量保持最大数字在角落</li>
+                <li>保持大数字相邻，便于合并</li>
+                <li>避免小数字分散在棋盘各处</li>
+                <li>在必要时保留一个方向作为紧急出口</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   )
