@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { GameTile } from './game-tile'
 import { cn } from '@/lib/utils'
 import { initializeGame, move, generateNumber, canMove, hasWon, createEmptyGrid } from './game-utils'
+import { Button } from '@/components/ui/button'
 
 export interface GameBoardProps {
   className?: string
@@ -80,12 +81,11 @@ export function GameBoard({ className }: GameBoardProps) {
       <h1 className="text-4xl font-bold mb-4">2048</h1>
       <div className="w-full max-w-[500px] min-w-[280px] flex items-center justify-between px-2">
         <div className="text-2xl font-bold">分数: {score}</div>
-        <button
+        <Button
           onClick={resetGame}
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
         >
           重新开始
-        </button>
+        </Button>
       </div>
       
       <div className={cn(
