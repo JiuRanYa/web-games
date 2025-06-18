@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: 'config.name',
-  description: 'config.description',
+  name: '摸鱼小游戏',
+  description: '在线摸鱼小游戏，让你在摸鱼的同时也能享受游戏的乐趣',
   mainNav: [
     {
       title: 'Home',
