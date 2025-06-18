@@ -1,9 +1,12 @@
 {
   "Index": {
-    "title": "漂亮的设计组件",
-    "description": "可访问和可定制的组件，您可以复制和粘贴到您的应用程序中。免费。开源。和 Next.js 13 准备好了。",
+    "title": "Web Games",
+    "description": "一个使用 Next.js 构建的现代网页游戏集合",
     "documentation": "文档",
-    "github": "GitHub"
+    "github": "GitHub",
+    "games": {
+      "title": "游戏列表"
+    }
   },
   "config": {
     "name": "摸鱼游戏",

@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { siteConfig } from '@/config/site'
 import { buttonVariants } from '@/components/ui/button'
 import { getTranslations } from 'next-intl/server'
+import { games } from '@/config/games'
+import { GameCard } from '@/components/games/game-card'
 
 export default async function IndexPage() {
   const t = await getTranslations('Index')
@@ -34,6 +36,15 @@ export default async function IndexPage() {
         >
           {t('github')}
         </Link>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="mb-6 text-2xl font-bold">{t('games.title')}</h2>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {games.map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
+        </div>
       </div>
     </section>
   )

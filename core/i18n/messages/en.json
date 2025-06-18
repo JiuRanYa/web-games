@@ -1,9 +1,12 @@
 {
   "Index": {
-    "title": "Beautifully designed components built with Radix UI and Tailwind CSS.",
-    "description": "Accessible and customizable components that you can copy and paste into your apps. Free. Open Source. And Next.js 13 Ready.",
+    "title": "Web Games",
+    "description": "A modern web games collection built with Next.js",
     "documentation": "Documentation",
-    "github": "GitHub"
+    "github": "GitHub",
+    "games": {
+      "title": "Games"
+    }
   },
   "config": {
     "name": "Web Game",
