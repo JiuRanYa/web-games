@@ -6,6 +6,7 @@ export interface Tile {
     col: number;
   };
   mergedFrom?: Tile[];
+  isNew?: boolean;
 }
 
 // 生成唯一ID的辅助函数
@@ -14,11 +15,12 @@ function generateId(): string {
 }
 
 // 创建新的Tile对象
-export function createTile(position: { row: number; col: number }, value: number): Tile {
+export function createTile(position: { row: number; col: number }, value: number, isNew: boolean = false): Tile {
   return {
     id: generateId(),
     value,
     position,
+    isNew,
   }
 }
 
@@ -35,7 +37,8 @@ export function generateNumber(grid: Tile[][]): Tile[][] {
   const newGrid = grid.map(row => [...row])
   newGrid[position.row][position.col] = createTile(
     position,
-    Math.random() < 0.9 ? 2 : 4
+    Math.random() < 0.9 ? 2 : 4,
+    true
   )
   
   return newGrid
@@ -166,41 +169,180 @@ export function hasWon(grid: Tile[][]): boolean {
 }
 
 // 执行移动操作
-export function move(
-  grid: Tile[][],
-  direction: 'up' | 'down' | 'left' | 'right'
-): { grid: Tile[][], score: number, moved: boolean } {
-  let newGrid = grid.map(row => [...row])
+export function move(grid: Tile[][], direction: 'up' | 'down' | 'left' | 'right'): {
+  grid: Tile[][];
+  score: number;
+  moved: boolean;
+} {
+  // 清除所有方块的isNew标记
+  const gridWithoutNew = grid.map(row =>
+    row.map(tile =>
+      tile ? { ...tile, isNew: false } : null
+    )
+  )
+  
   let totalScore = 0
   let moved = false
-  
-  const moveAndTrack = (row: Tile[], dir: 'left' | 'right'): Tile[] => {
-    const [newRow, score] = moveRow(row, dir)
-    totalScore += score
-    if (JSON.stringify(row) !== JSON.stringify(newRow)) {
-      moved = true
+  const newGrid = gridWithoutNew.map(row => [...row])
+
+  const moveLeft = () => {
+    for (let i = 0; i < 4; i++) {
+      let column = 0
+      for (let j = 1; j < 4; j++) {
+        if (!newGrid[i][j]) continue
+        
+        const currentTile = newGrid[i][j]
+        let k = j
+        
+        while (k > column && !newGrid[i][k - 1]) {
+          k--
+        }
+        
+        if (k > column && newGrid[i][k - 1]?.value === currentTile.value) {
+          const targetTile = newGrid[i][k - 1]
+          const mergedTile = createTile(
+            { row: i, col: k - 1 },
+            currentTile.value * 2
+          )
+          mergedTile.mergedFrom = [targetTile, currentTile]
+          
+          newGrid[i][k - 1] = mergedTile
+          newGrid[i][j] = null
+          totalScore += mergedTile.value
+          column = k
+          moved = true
+        } else if (k !== j) {
+          currentTile.position = { row: i, col: k }
+          newGrid[i][k] = currentTile
+          newGrid[i][j] = null
+          moved = true
+        }
+      }
     }
-    return newRow
   }
-  
+
+  const moveRight = () => {
+    for (let i = 0; i < 4; i++) {
+      let column = 3
+      for (let j = 2; j >= 0; j--) {
+        if (!newGrid[i][j]) continue
+        
+        const currentTile = newGrid[i][j]
+        let k = j
+        
+        while (k < column && !newGrid[i][k + 1]) {
+          k++
+        }
+        
+        if (k < column && newGrid[i][k + 1]?.value === currentTile.value) {
+          const targetTile = newGrid[i][k + 1]
+          const mergedTile = createTile(
+            { row: i, col: k + 1 },
+            currentTile.value * 2
+          )
+          mergedTile.mergedFrom = [targetTile, currentTile]
+          
+          newGrid[i][k + 1] = mergedTile
+          newGrid[i][j] = null
+          totalScore += mergedTile.value
+          column = k
+          moved = true
+        } else if (k !== j) {
+          currentTile.position = { row: i, col: k }
+          newGrid[i][k] = currentTile
+          newGrid[i][j] = null
+          moved = true
+        }
+      }
+    }
+  }
+
+  const moveUp = () => {
+    for (let j = 0; j < 4; j++) {
+      let row = 0
+      for (let i = 1; i < 4; i++) {
+        if (!newGrid[i][j]) continue
+        
+        const currentTile = newGrid[i][j]
+        let k = i
+        
+        while (k > row && !newGrid[k - 1][j]) {
+          k--
+        }
+        
+        if (k > row && newGrid[k - 1][j]?.value === currentTile.value) {
+          const targetTile = newGrid[k - 1][j]
+          const mergedTile = createTile(
+            { row: k - 1, col: j },
+            currentTile.value * 2
+          )
+          mergedTile.mergedFrom = [targetTile, currentTile]
+          
+          newGrid[k - 1][j] = mergedTile
+          newGrid[i][j] = null
+          totalScore += mergedTile.value
+          row = k
+          moved = true
+        } else if (k !== i) {
+          currentTile.position = { row: k, col: j }
+          newGrid[k][j] = currentTile
+          newGrid[i][j] = null
+          moved = true
+        }
+      }
+    }
+  }
+
+  const moveDown = () => {
+    for (let j = 0; j < 4; j++) {
+      let row = 3
+      for (let i = 2; i >= 0; i--) {
+        if (!newGrid[i][j]) continue
+        
+        const currentTile = newGrid[i][j]
+        let k = i
+        
+        while (k < row && !newGrid[k + 1][j]) {
+          k++
+        }
+        
+        if (k < row && newGrid[k + 1][j]?.value === currentTile.value) {
+          const targetTile = newGrid[k + 1][j]
+          const mergedTile = createTile(
+            { row: k + 1, col: j },
+            currentTile.value * 2
+          )
+          mergedTile.mergedFrom = [targetTile, currentTile]
+          
+          newGrid[k + 1][j] = mergedTile
+          newGrid[i][j] = null
+          totalScore += mergedTile.value
+          row = k
+          moved = true
+        } else if (k !== i) {
+          currentTile.position = { row: k, col: j }
+          newGrid[k][j] = currentTile
+          newGrid[i][j] = null
+          moved = true
+        }
+      }
+    }
+  }
+
   switch (direction) {
     case 'left':
-      newGrid = newGrid.map(row => moveAndTrack(row, 'left'))
+      moveLeft()
       break
     case 'right':
-      newGrid = newGrid.map(row => moveAndTrack([...row].reverse(), 'left')).map(row => [...row].reverse())
+      moveRight()
       break
     case 'up':
-      newGrid = rotateGrid(newGrid)
-      newGrid = newGrid.map(row => moveAndTrack(row, 'left'))
-      newGrid = rotateGrid(rotateGrid(rotateGrid(newGrid)))
+      moveUp()
       break
     case 'down':
-      newGrid = rotateGrid(rotateGrid(rotateGrid(newGrid)))
-      newGrid = newGrid.map(row => moveAndTrack(row, 'left'))
-      newGrid = rotateGrid(newGrid)
+      moveDown()
       break
   }
-  
+
   return { grid: newGrid, score: totalScore, moved }
 }

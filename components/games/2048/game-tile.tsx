@@ -36,15 +36,16 @@ interface GameTileProps {
 }
 
 export function GameTile({ tile, className }: GameTileProps) {
-  const { value, position } = tile
+  const { value, position, isNew } = tile
   const style = {
     left: `${position.col * 25}%`,
     top: `${position.row * 25}%`,
     width: '25%',
     height: '25%',
-    transform: 'scale(0.95)',
+    transform: `scale(${isNew ? 0 : 0.95})`,
     transition: 'all 100ms ease-in-out',
     zIndex: 2,
+    animation: isNew ? 'tile-pop 200ms ease-in-out forwards' : undefined,
   }
 
   return (
@@ -58,6 +59,19 @@ export function GameTile({ tile, className }: GameTileProps) {
         className
       )}
     >
+      <style jsx>{`
+        @keyframes tile-pop {
+          0% {
+            transform: scale(0);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(0.95);
+          }
+        }
+      `}</style>
       {value}
     </div>
   )
