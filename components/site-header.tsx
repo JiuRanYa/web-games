@@ -6,6 +6,7 @@ import { Icons } from '@/components/icons'
 import { MainNav } from '@/components/main-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LanguageSwitch } from '@/components/language-switch'
+import { MobileMenu } from '@/components/mobile-menu'
 import { cn } from '@/lib/utils'
 
 export function SiteHeader() {
@@ -14,7 +15,7 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <MainNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center">
+          <nav className="hidden md:flex items-center">
             {siteConfig.mainNav?.length ? (
               <div className="flex items-center border-r border-gray-200 dark:border-gray-800 pr-4 mr-4">
                 {siteConfig.mainNav?.map(
@@ -69,6 +70,7 @@ export function SiteHeader() {
               <LanguageSwitch />
             </div>
           </nav>
+          <MobileMenu />
         </div>
       </div>
     </header>
