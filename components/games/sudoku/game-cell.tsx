@@ -7,6 +7,7 @@ interface GameCellProps {
   isSelected: boolean
   isError: boolean
   onClick: () => void
+  position: [number, number]
 }
 
 export function GameCell({
@@ -14,25 +15,30 @@ export function GameCell({
   isInitial,
   isSelected,
   isError,
-  onClick
+  onClick,
+  position
 }: GameCellProps) {
+  const [row, col] = position
+  const isLeftBorder = col % 3 === 0
+  const isTopBorder = row % 3 === 0
+
   return (
     <button
       className={cn(
-        'relative aspect-square w-full',
-        'rounded-md bg-[#cdc1b4] transition-colors',
+        'relative w-full aspect-square',
         'flex items-center justify-center',
-        'text-lg md:text-xl font-medium',
-        isInitial && 'font-bold text-gray-700',
-        isSelected && 'bg-[#eee4da]',
+        'text-xl md:text-2xl',
+        'border-[0.5px] border-gray-400',
+        isLeftBorder && 'border-l-2 border-l-gray-700',
+        isTopBorder && 'border-t-2 border-t-gray-700',
+        isInitial ? 'font-bold text-gray-700' : 'text-gray-600',
+        isSelected && 'ring-2 ring-orange-400',
         isError && 'text-red-500',
         !value && 'text-muted-foreground'
       )}
       onClick={onClick}
     >
-      <span className="absolute inset-0 flex items-center justify-center">
-        {value || ''}
-      </span>
+      {value || ''}
     </button>
   )
 } 

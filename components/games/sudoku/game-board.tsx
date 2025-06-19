@@ -1,13 +1,11 @@
 'use client'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { GameCell } from './game-cell'
-import { GameControls } from './game-controls'
 import { DifficultySettingsModal } from './difficulty-settings-modal'
 import {
   Difficulty,
   generateGame,
-  getPossibleNumbers,
   isGameComplete,
   isInitialNumber,
   isValid
@@ -41,13 +39,12 @@ export function GameBoard() {
   }, [])
 
   // 处理数字输入
-  const handleNumberClick = useCallback((number: number) => {
+  const handleNumberInput = useCallback((number: number) => {
     if (!selectedPosition) return
-
     const [row, col] = selectedPosition
-    const newBoard = board.map(r => [...r])
     
     if (!isInitialNumber(initialBoard, selectedPosition)) {
+      const newBoard = board.map(r => [...r])
       newBoard[row][col] = number
       setBoard(newBoard)
 
@@ -58,11 +55,11 @@ export function GameBoard() {
     }
   }, [board, selectedPosition, initialBoard])
 
-  // 处理擦除
-  const handleErase = useCallback(() => {
+  // 处理删除
+  const handleDelete = useCallback(() => {
     if (!selectedPosition) return
-
     const [row, col] = selectedPosition
+    
     if (!isInitialNumber(initialBoard, selectedPosition)) {
       const newBoard = board.map(r => [...r])
       newBoard[row][col] = null
@@ -70,12 +67,53 @@ export function GameBoard() {
     }
   }, [board, selectedPosition, initialBoard])
 
-  // 获取当前选中位置可用的数字
-  const getPossibleNumbersForSelected = useCallback(() => {
-    if (!selectedPosition) return []
-    if (isInitialNumber(initialBoard, selectedPosition)) return []
-    return getPossibleNumbers(board, selectedPosition)
-  }, [board, selectedPosition, initialBoard])
+  // 处理键盘事件
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!selectedPosition) return
+
+    // 数字键1-9
+    if (e.key >= '1' && e.key <= '9') {
+      handleNumberInput(parseInt(e.key))
+    }
+    // 数字小键盘1-9
+    else if (e.code >= 'Numpad1' && e.code <= 'Numpad9') {
+      handleNumberInput(parseInt(e.code.replace('Numpad', '')))
+    }
+    // 删除键和退格键
+    else if (e.key === 'Delete' || e.key === 'Backspace') {
+      handleDelete()
+    }
+    // 方向键
+    else if (e.key.startsWith('Arrow')) {
+      e.preventDefault()
+      const [currentRow, currentCol] = selectedPosition
+      let newRow = currentRow
+      let newCol = currentCol
+
+      switch (e.key) {
+        case 'ArrowUp':
+          newRow = Math.max(0, currentRow - 1)
+          break
+        case 'ArrowDown':
+          newRow = Math.min(8, currentRow + 1)
+          break
+        case 'ArrowLeft':
+          newCol = Math.max(0, currentCol - 1)
+          break
+        case 'ArrowRight':
+          newCol = Math.min(8, currentCol + 1)
+          break
+      }
+
+      setSelectedPosition([newRow, newCol])
+    }
+  }, [selectedPosition, handleNumberInput, handleDelete])
+
+  // 添加键盘事件监听
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
 
   // 检查数字是否有效
   const isNumberValid = useCallback((row: number, col: number): boolean => {
@@ -89,13 +127,14 @@ export function GameBoard() {
   }, [board])
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full p-4">
-      <h1 className="text-4xl font-bold mb-4">数独</h1>
+    <div className="flex flex-col items-center gap-4 w-full p-4 bg-[#f5e6d3]">
+      <h1 className="text-4xl font-bold mb-4 text-gray-800">Sudoku Game</h1>
       
       <div className="w-full max-w-[500px] min-w-[280px] flex items-center justify-between px-2 mb-4">
         <Button
           variant="outline"
           onClick={() => setIsSettingsOpen(true)}
+          className="bg-white hover:bg-gray-100"
         >
           新游戏
         </Button>
@@ -104,7 +143,8 @@ export function GameBoard() {
       <div 
         className={cn(
           'w-full max-w-[500px] min-w-[280px] aspect-square',
-          'rounded-lg bg-[#bbada0] p-2 md:p-3',
+          'rounded-lg bg-[#f5e6d3] border-2 border-gray-700 p-0.5',
+          'shadow-lg'
         )}
       >
         {isComplete && (
@@ -116,7 +156,7 @@ export function GameBoard() {
         )}
 
         <div className="relative h-full w-full">
-          <div className="grid grid-cols-9 gap-0.5 h-full w-full">
+          <div className="grid grid-cols-9 h-full w-full">
             {board.map((row, rowIndex) =>
               row.map((cell, colIndex) => (
                 <GameCell
@@ -129,6 +169,7 @@ export function GameBoard() {
                   }
                   isError={cell !== null && !isNumberValid(rowIndex, colIndex)}
                   onClick={() => setSelectedPosition([rowIndex, colIndex])}
+                  position={[rowIndex, colIndex]}
                 />
               ))
             )}
@@ -136,15 +177,8 @@ export function GameBoard() {
         </div>
       </div>
 
-      <GameControls
-        onNumberClick={handleNumberClick}
-        onEraseClick={handleErase}
-        possibleNumbers={getPossibleNumbersForSelected()}
-        disabled={!selectedPosition || isComplete}
-      />
-
       <div className="w-full max-w-[500px] min-w-[280px] mt-8">
-        <Accordion type="single" collapsible>
+        <Accordion type="single" collapsible className="bg-white rounded-lg">
           <AccordionItem value="rules">
             <AccordionTrigger>游戏规则</AccordionTrigger>
             <AccordionContent>
@@ -161,10 +195,10 @@ export function GameBoard() {
             <AccordionTrigger>操作说明</AccordionTrigger>
             <AccordionContent>
               <ul className="list-disc pl-4 space-y-2">
-                <li>点击空格子选中它</li>
-                <li>点击数字按钮或使用键盘输入数字</li>
-                <li>点击擦除按钮或按退格键删除数字</li>
-                <li>高亮的数字表示当前格子可以填入的数字</li>
+                <li>点击格子选中它</li>
+                <li>使用数字键（1-9）或数字小键盘输入数字</li>
+                <li>使用退格键或删除键清除数字</li>
+                <li>使用方向键在格子间移动</li>
                 <li>红色数字表示与规则冲突</li>
               </ul>
             </AccordionContent>
