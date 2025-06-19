@@ -1,14 +1,14 @@
 import * as React from 'react'
 import Link from 'next/link'
 
-import { Icons } from '@/components/icons'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 
 export function MainNav() {
   const t = useTranslations('config')
   return (
     <Link href="/" className="flex items-center space-x-2">
-      <Icons.logo className="h-8 w-8" />
+      <Image src="/android-chrome-512x512.png" alt="logo" width={32} height={32} className="rounded-full" />
       <span className="inline-block font-bold">{t('name')}</span>
     </Link>
   )
