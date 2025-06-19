@@ -159,4 +159,34 @@ export function getPossibleNumbers(board: Board, pos: Position): number[] {
     }
   }
   return possible
+}
+
+// 排行榜记录类型
+export interface LeaderboardRecord {
+  difficulty: Difficulty
+  timeInSeconds: number
+  date: string
+}
+
+// 获取排行榜数据
+export function getLeaderboard(): LeaderboardRecord[] {
+  const data = localStorage.getItem('sudoku-leaderboard')
+  return data ? JSON.parse(data) : []
+}
+
+// 保存排行榜数据
+export function saveLeaderboard(records: LeaderboardRecord[]) {
+  localStorage.setItem('sudoku-leaderboard', JSON.stringify(records))
+}
+
+// 添加新记录到排行榜
+export function addLeaderboardRecord(record: LeaderboardRecord) {
+  const records = getLeaderboard()
+  records.push(record)
+  // 按时间升序排序
+  records.sort((a, b) => a.timeInSeconds - b.timeInSeconds)
+  // 只保留前10名
+  const topRecords = records.slice(0, 10)
+  saveLeaderboard(topRecords)
+  return topRecords
 } 
