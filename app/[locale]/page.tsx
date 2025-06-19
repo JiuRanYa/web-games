@@ -1,25 +1,19 @@
 'use client'
 
-import Link from 'next/link'
-import Image from 'next/image'
-
-import { siteConfig } from '@/config/site'
-import { buttonVariants } from '@/components/ui/button'
 import { games } from '@/config/games'
 import { GameCard } from '@/components/games/game-card'
-import { use3DEffect } from '@/core/hooks/use3DEffect'
 
 export default function IndexPage() {
-  const controllerRef = use3DEffect<HTMLDivElement>({
-    intensity: 4,
-    perspective: 1200,
-    smooth: 0.25
-  })
+  // const controllerRef = use3DEffect<HTMLDivElement>({
+  //   intensity: 4,
+  //   perspective: 1200,
+  //   smooth: 0.25
+  // })
 
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="relative flex flex-row items-center gap-8 py-12 my-12">
-        <div className="flex flex-col gap-4">
+    <section className="container grid items-center gap-6">
+      {/* <div className="relative flex flex-row items-center gap-8 py-12 my-12"> */}
+      {/* <div className="flex flex-col gap-4">
           <div className="flex max-w-[980px] flex-col items-start gap-2">
             <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
               网页游戏百集
@@ -55,7 +49,7 @@ export default function IndexPage() {
             priority
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-12">
         <h2 className="mb-6 text-2xl font-bold">游戏列表</h2>
