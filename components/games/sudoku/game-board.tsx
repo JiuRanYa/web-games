@@ -34,6 +34,7 @@ export function GameBoard() {
   const [currentDifficulty, setCurrentDifficulty] = useState<Difficulty>('easy')
   const [timeInSeconds, setTimeInSeconds] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [hintPosition, setHintPosition] = useState<Position | null>(null)
 
   // 初始化游戏
   const initGame = useCallback((difficulty: Difficulty) => {
@@ -159,6 +160,48 @@ export function GameBoard() {
     return valid
   }, [board])
 
+  // 添加提示功能
+  const handleHint = useCallback(() => {
+    // 找到一个未填写且不是初始数字的格子
+    const emptyPositions: Position[] = []
+    board.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell === null && !isInitialNumber(initialBoard, [rowIndex, colIndex])) {
+          emptyPositions.push([rowIndex, colIndex])
+        }
+      })
+    })
+
+    if (emptyPositions.length > 0) {
+      // 随机选择一个空格子
+      const randomPosition = emptyPositions[Math.floor(Math.random() * emptyPositions.length)]
+      const [row, col] = randomPosition
+      
+      // 填入正确答案
+      const newBoard = board.map(r => [...r])
+      newBoard[row][col] = solution[row][col]
+      setBoard(newBoard)
+      
+      // 设置提示动画位置
+      setHintPosition(randomPosition)
+      // 2秒后清除动画状态
+      setTimeout(() => {
+        setHintPosition(null)
+      }, 2000)
+
+      // 检查游戏是否完成
+      if (isGameComplete(newBoard)) {
+        setIsComplete(true)
+        setIsTimerRunning(false)
+        addLeaderboardRecord({
+          difficulty: currentDifficulty,
+          timeInSeconds,
+          date: new Date().toISOString()
+        })
+      }
+    }
+  }, [board, initialBoard, solution, currentDifficulty, timeInSeconds])
+
   return (
     <div className="flex flex-col items-center gap-4 w-full p-4">
       <h1 className="text-4xl font-bold mb-4 text-gray-800">Sudoku Game</h1>
@@ -180,6 +223,13 @@ export function GameBoard() {
               onMouseLeave={() => setIsPreviewingSolution(false)}
             >
               解法
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleHint}
+              className="bg-white hover:bg-gray-100"
+            >
+              提示
             </Button>
           </div>
           <div className="flex items-center gap-2">
@@ -212,6 +262,10 @@ export function GameBoard() {
                       selectedPosition?.[1] === colIndex
                     }
                     isError={cell !== null && !isNumberValid(rowIndex, colIndex)}
+                    isHint={
+                      hintPosition?.[0] === rowIndex &&
+                      hintPosition?.[1] === colIndex
+                    }
                     onClick={() => setSelectedPosition([rowIndex, colIndex])}
                     position={[rowIndex, colIndex]}
                     isFirstRow={rowIndex === 0}

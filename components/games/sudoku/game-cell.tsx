@@ -7,6 +7,7 @@ interface GameCellProps {
   isInitial: boolean
   isSelected: boolean
   isError: boolean
+  isHint: boolean
   onClick: () => void
   position: [number, number]
   isFirstRow: boolean
@@ -21,6 +22,7 @@ export function GameCell({
   isInitial,
   isSelected,
   isError,
+  isHint,
   onClick,
   position,
   isFirstRow,
@@ -66,10 +68,11 @@ export function GameCell({
         </span>
       ) : (
         <span className={cn(
-          'font-medium',
+          'font-medium transition-transform duration-1000',
           isError && 'text-red-500',
           isInitial && 'text-gray-900',
-          !isInitial && !isError && 'text-blue-600'
+          !isInitial && !isError && 'text-blue-600',
+          isHint && 'animate-[scale_2s_ease-in-out]'
         )}>
           {value}
         </span>
