@@ -37,6 +37,7 @@ export function GameCell({
         'flex items-center justify-center',
         'text-xl md:text-2xl bg-[#f5e6d3]',
         'border-[0.5px] border-gray-400',
+        'focus:outline-none',
         // 3x3区域边框
         isRightBorder && 'border-r-2 border-r-gray-700',
         isBottomBorder && 'border-b-2 border-b-gray-700',
@@ -50,14 +51,17 @@ export function GameCell({
         isFirstRow && isLastCol && 'rounded-tr-lg',
         isLastRow && isFirstCol && 'rounded-bl-lg',
         isLastRow && isLastCol && 'rounded-br-lg',
-        // 其他样式
-        isInitial ? 'font-bold text-gray-700' : 'text-gray-600',
-        isSelected && 'ring-2 ring-orange-400',
+        // 文字颜色
+        isInitial && 'font-bold text-gray-700',
+        !isInitial && !isError && value && 'text-blue-600',
         isError && 'text-red-500'
       )}
       onClick={onClick}
     >
       {value || ''}
+      {isSelected && (
+        <div className="absolute inset-0 border-2 border-orange-400 pointer-events-none" />
+      )}
     </button>
   )
 } 
