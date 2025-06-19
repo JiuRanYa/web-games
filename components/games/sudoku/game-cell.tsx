@@ -70,7 +70,10 @@ export function GameCell({
         <span className="text-blue-400 opacity-50">{previewValue}</span>
       ) : (
         <span className={cn(
-          isInitial && 'font-bold'
+          'font-medium',
+          isError && 'text-red-500',
+          isInitial && 'text-gray-900',
+          !isInitial && !isError && 'text-blue-600'
         )}>
           {value}
         </span>
