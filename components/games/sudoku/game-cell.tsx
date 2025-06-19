@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 
 interface GameCellProps {
   value: number | null
+  previewValue: number | null
   isInitial: boolean
   isSelected: boolean
   isError: boolean
@@ -16,6 +17,7 @@ interface GameCellProps {
 
 export function GameCell({
   value,
+  previewValue,
   isInitial,
   isSelected,
   isError,
@@ -29,6 +31,8 @@ export function GameCell({
   const [row, col] = position
   const isRightBorder = (col + 1) % 3 === 0 && col < 8
   const isBottomBorder = (row + 1) % 3 === 0 && row < 8
+  const isThickBottom = (row + 1) % 3 === 0 && !isLastRow
+  const isThickRight = (col + 1) % 3 === 0 && !isLastCol
 
   return (
     <button
@@ -54,11 +58,23 @@ export function GameCell({
         // 文字颜色
         isInitial && 'font-bold text-gray-700',
         !isInitial && !isError && value && 'text-blue-600',
-        isError && 'text-red-500'
+        isError && 'text-red-500',
+        isSelected && 'bg-blue-50',
+        isThickBottom && 'border-b-2',
+        isThickRight && 'border-r-2',
+        'hover:bg-gray-50 cursor-pointer transition-colors'
       )}
       onClick={onClick}
     >
-      {value || ''}
+      {previewValue && !value ? (
+        <span className="text-blue-400 opacity-50">{previewValue}</span>
+      ) : (
+        <span className={cn(
+          isInitial && 'font-bold'
+        )}>
+          {value}
+        </span>
+      )}
       {isSelected && (
         <div className="absolute inset-0 border-2 border-orange-400 pointer-events-none" />
       )}

@@ -129,7 +129,7 @@ function removeNumbers(board: Board, difficulty: Difficulty): Board {
 }
 
 // 解数独
-function solveSudoku(board: Board): boolean {
+export function solveSudoku(board: Board): boolean {
   const empty = findEmpty(board)
   if (!empty) return true
 

@@ -10,7 +10,8 @@ import {
   isGameComplete,
   isInitialNumber,
   isValid,
-  addLeaderboardRecord
+  addLeaderboardRecord,
+  solveSudoku
 } from './game-utils'
 import {
   Accordion,
@@ -25,6 +26,8 @@ type Position = [number, number]
 export function GameBoard() {
   const [board, setBoard] = useState<Board>([])
   const [initialBoard, setInitialBoard] = useState<Board>([])
+  const [solution, setSolution] = useState<Board>([])
+  const [isPreviewingSolution, setIsPreviewingSolution] = useState(false)
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(null)
   const [isSettingsOpen, setIsSettingsOpen] = useState(true)
   const [isComplete, setIsComplete] = useState(false)
@@ -35,6 +38,11 @@ export function GameBoard() {
   // 初始化游戏
   const initGame = useCallback((difficulty: Difficulty) => {
     const newBoard = generateGame(difficulty)
+    // 保存完整解法
+    const solutionBoard = newBoard.map(row => [...row])
+    solveSudoku(solutionBoard)
+    setSolution(solutionBoard)
+    
     setBoard(newBoard.map(row => [...row]))
     setInitialBoard(newBoard.map(row => [...row]))
     setSelectedPosition(null)
@@ -157,15 +165,27 @@ export function GameBoard() {
       
       <div className="flex flex-col items-center gap-4 relative">
         <div className="w-[500px] flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={() => setIsSettingsOpen(true)}
-            className="bg-white hover:bg-gray-100"
-          >
-            新游戏
-          </Button>
-          <div className="font-mono text-lg">
-            {Math.floor(timeInSeconds / 60)}:{(timeInSeconds % 60).toString().padStart(2, '0')}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsSettingsOpen(true)}
+              className="bg-white hover:bg-gray-100"
+            >
+              新游戏
+            </Button>
+            <Button
+              variant="outline"
+              onMouseDown={() => setIsPreviewingSolution(true)}
+              onMouseUp={() => setIsPreviewingSolution(false)}
+              onMouseLeave={() => setIsPreviewingSolution(false)}
+            >
+              解法
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="font-mono text-lg">
+              {Math.floor(timeInSeconds / 60)}:{(timeInSeconds % 60).toString().padStart(2, '0')}
+            </div>
           </div>
         </div>
 
@@ -185,6 +205,7 @@ export function GameBoard() {
                   <GameCell
                     key={`${rowIndex}-${colIndex}`}
                     value={cell}
+                    previewValue={isPreviewingSolution ? solution[rowIndex][colIndex] : null}
                     isInitial={isInitialNumber(initialBoard, [rowIndex, colIndex])}
                     isSelected={
                       selectedPosition?.[0] === rowIndex &&
