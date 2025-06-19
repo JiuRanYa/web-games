@@ -11,22 +11,37 @@ import { routing } from '@/core/i18n/routing'
 import { notFound } from 'next/navigation'
 import {NextIntlClientProvider, hasLocale} from 'next-intl'
 
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
-  },
-}
-
 interface RootLayoutProps {
     children: React.ReactNode;
     params: Promise<{locale: string}>;
+}
+
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const { locale } = params
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://games.tool.tokyo'
+
+  // 为每个语言生成备用链接
+  const alternates: Record<string, string> = {}
+  routing.locales.forEach((lang) => {
+    alternates[lang] = `${baseUrl}/${lang}`
+  })
+
+  return {
+    title: {
+      default: siteConfig.name,
+      template: `%s - ${siteConfig.name}`,
+    },
+    description: siteConfig.description,
+    icons: {
+      icon: '/favicon.ico',
+      shortcut: '/favicon-16x16.png',
+      apple: '/apple-touch-icon.png',
+    },
+    alternates: {
+      languages: alternates,
+      canonical: `${baseUrl}/${locale}`
+    }
+  }
 }
 
 export default async function RootLayout({
@@ -39,7 +54,7 @@ export default async function RootLayout({
   }
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
+      <html lang={locale} suppressHydrationWarning>
         <head />
         <body
           className={cn(
