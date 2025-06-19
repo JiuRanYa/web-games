@@ -10,14 +10,14 @@ export const siteConfig = {
       title: 'Home',
       href: '/',
     },
-    {
-      title: '2048',
-      href: '/games/2048',
-    },
-    {
-      title: '数独',
-      href: '/games/sudoku',
-    },
+    // {
+    //   title: '2048',
+    //   href: '/games/2048',
+    // },
+    // {
+    //   title: '数独',
+    //   href: '/games/sudoku',
+    // },
   ] as NavItem[],
   links: {
     twitter: 'https://twitter.com/shadcn',
