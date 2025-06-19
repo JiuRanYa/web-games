@@ -20,8 +20,8 @@ export const siteConfig = {
     // },
   ] as NavItem[],
   links: {
-    twitter: 'https://twitter.com/shadcn',
-    github: 'https://github.com/shadcn/ui',
+    twitter: 'https://twitter.com/JiuRanYa',
+    github: 'https://github.com/JiuRanYa/web-games',
     docs: 'https://ui.shadcn.com',
   },
 }
