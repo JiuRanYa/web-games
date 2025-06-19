@@ -3,12 +3,20 @@ import { NavItem } from '@/types/nav'
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: '摸鱼小游戏',
-  description: '在线摸鱼小游戏，让你在摸鱼的同时也能享受游戏的乐趣',
+  name: '玩趣集',
+  description: '在线小游戏，让你在摸鱼的同时也能享受游戏的乐趣',
   mainNav: [
     {
       title: 'Home',
       href: '/',
+    },
+    {
+      title: '2048',
+      href: '/games/2048',
+    },
+    {
+      title: '数独',
+      href: '/games/sudoku',
     },
   ] as NavItem[],
   links: {
