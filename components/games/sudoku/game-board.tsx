@@ -218,18 +218,18 @@ export function GameBoard() {
             </Button>
             <Button
               variant="outline"
+              onClick={handleHint}
+              className="bg-white hover:bg-gray-100"
+            >
+              提示
+            </Button>
+            <Button
+              variant="outline"
               onMouseDown={() => setIsPreviewingSolution(true)}
               onMouseUp={() => setIsPreviewingSolution(false)}
               onMouseLeave={() => setIsPreviewingSolution(false)}
             >
               解法
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleHint}
-              className="bg-white hover:bg-gray-100"
-            >
-              提示
             </Button>
           </div>
           <div className="flex items-center gap-2">
