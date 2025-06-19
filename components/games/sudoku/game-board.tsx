@@ -143,7 +143,7 @@ export function GameBoard() {
       <div 
         className={cn(
           'w-full max-w-[500px] min-w-[280px] aspect-square',
-          'rounded-lg bg-[#f5e6d3] border-2 border-gray-700 p-0.5',
+          'rounded-lg overflow-hidden',
           'shadow-lg'
         )}
       >
@@ -156,7 +156,7 @@ export function GameBoard() {
         )}
 
         <div className="relative h-full w-full">
-          <div className="grid grid-cols-9 h-full w-full">
+          <div className="grid grid-cols-9 h-full w-full rounded-lg">
             {board.map((row, rowIndex) =>
               row.map((cell, colIndex) => (
                 <GameCell
@@ -170,6 +170,10 @@ export function GameBoard() {
                   isError={cell !== null && !isNumberValid(rowIndex, colIndex)}
                   onClick={() => setSelectedPosition([rowIndex, colIndex])}
                   position={[rowIndex, colIndex]}
+                  isFirstRow={rowIndex === 0}
+                  isLastRow={rowIndex === 8}
+                  isFirstCol={colIndex === 0}
+                  isLastCol={colIndex === 8}
                 />
               ))
             )}
