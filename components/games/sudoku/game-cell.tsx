@@ -57,8 +57,13 @@ export function GameCell({
       {isSelected && (
         <div className="absolute inset-0 border-2 border-orange-400 pointer-events-none" />
       )}
-      {previewValue && !value ? (
-        <span className="text-blue-400 opacity-50">{previewValue}</span>
+      {previewValue ? (
+        <span className={cn(
+          'font-medium',
+          isInitial ? 'text-gray-900' : 'text-blue-400 opacity-50'
+        )}>
+          {previewValue}
+        </span>
       ) : (
         <span className={cn(
           'font-medium',

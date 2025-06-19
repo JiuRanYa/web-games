@@ -34,16 +34,16 @@ export function DifficultySettingsModal({
         </DialogHeader>
         <div className="grid gap-4">
           {difficulties.map(({ label, value }) => (
-          <Button
+            <Button
               key={value}
-            variant="outline"
+              variant="outline"
               className="w-full"
               onClick={() => {
                 onStart(value)
               }}
-          >
+            >
               {label}
-          </Button>
+            </Button>
           ))}
         </div>
       </DialogContent>
