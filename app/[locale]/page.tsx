@@ -1,14 +1,20 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 
 import { siteConfig } from '@/config/site'
 import { buttonVariants } from '@/components/ui/button'
-import { getTranslations } from 'next-intl/server'
 import { games } from '@/config/games'
 import { GameCard } from '@/components/games/game-card'
+import { use3DEffect } from '@/core/hooks/use3DEffect'
 
-export default async function IndexPage() {
-  const t = await getTranslations('Index')
+export default function IndexPage() {
+  const controllerRef = use3DEffect<HTMLDivElement>({
+    intensity: 4,
+    perspective: 1200,
+    smooth: 0.25
+  })
 
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
@@ -16,10 +22,10 @@ export default async function IndexPage() {
         <div className="flex flex-col gap-4">
           <div className="flex max-w-[980px] flex-col items-start gap-2">
             <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-              {t('title')}
+              网页游戏百集
             </h1>
             <p className="max-w-[700px] text-lg text-muted-foreground">
-              {t('description')}
+              一个网页游戏合集，包括数独、2048、俄罗斯方块等各类游戏。
             </p>
           </div>
           <div className="flex gap-4">
@@ -29,18 +35,18 @@ export default async function IndexPage() {
               href={siteConfig.links.github}
               className={buttonVariants({ variant: 'outline' })}
             >
-              {t('github')}
+              GitHub
             </Link>
             <Link
               href={'/games/2048'}
               rel="noreferrer"
               className={buttonVariants()}
             >
-              {t('palynow')}
+              现在玩
             </Link>
           </div>
         </div>
-        <div className="hidden md:block absolute right-[15%]">
+        <div ref={controllerRef} className="hidden md:block absolute right-[15%] preserve-3d">
           <Image
             src="/game-controller.png"
             alt="Game Controller"
@@ -52,7 +58,7 @@ export default async function IndexPage() {
       </div>
 
       <div className="mt-12">
-        <h2 className="mb-6 text-2xl font-bold">{t('games.title')}</h2>
+        <h2 className="mb-6 text-2xl font-bold">游戏列表</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {games.map((game) => (
             <GameCard key={game.id} game={game} />
