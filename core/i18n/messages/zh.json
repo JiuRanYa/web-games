@@ -1,8 +1,8 @@
 {
   "Index": {
-    "title": "Web Games",
-    "description": "一个使用 Next.js 构建的现代网页游戏集合",
-    "documentation": "文档",
+    "title": "网页游戏合集",
+    "description": "一个网页游戏合集，包括数独、2048、俄罗斯方块等各类游戏。",
+    "palynow": "现在玩",
     "github": "GitHub",
     "games": {
       "title": "游戏列表"

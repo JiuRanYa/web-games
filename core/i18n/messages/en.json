@@ -2,7 +2,7 @@
   "Index": {
     "title": "Web Games",
     "description": "A modern web games collection built with Next.js",
-    "documentation": "Documentation",
+    "palynow": "Play Now",
     "github": "GitHub",
     "games": {
       "title": "Games"
