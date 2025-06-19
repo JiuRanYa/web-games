@@ -127,7 +127,7 @@ export function GameBoard() {
   }, [board])
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full p-4 bg-[#f5e6d3]">
+    <div className="flex flex-col items-center gap-4 w-full p-4">
       <h1 className="text-4xl font-bold mb-4 text-gray-800">Sudoku Game</h1>
       
       <div className="w-full max-w-[500px] min-w-[280px] flex items-center justify-between px-2 mb-4">
