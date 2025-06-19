@@ -44,13 +44,100 @@ function findEmpty(board: Board): Position | null {
   return null
 }
 
+// 计算解的数量
+function countSolutions(board: Board): number {
+  let count = 0
+  const empty = findEmpty(board)
+  
+  // 如果没有空位置，说明找到了一个解
+  if (!empty) return 1
+  
+  const [row, col] = empty
+  // 尝试填入1-9
+  for (let num = 1; num <= 9; num++) {
+    if (isValid(board, [row, col], num)) {
+      board[row][col] = num
+      count += countSolutions(board)
+      if (count > 1) break // 如果已经找到多个解，提前返回
+      board[row][col] = null
+    }
+  }
+  
+  return count
+}
+
+// 检查是否只有唯一解
+function hasUniqueSolution(board: Board): boolean {
+  const boardCopy = board.map(row => [...row])
+  return countSolutions(boardCopy) === 1
+}
+
+// 生成完整的数独解决方案
+function generateSolution(): Board {
+  const board: Board = Array(BOARD_SIZE).fill(null)
+    .map(() => Array(BOARD_SIZE).fill(null))
+
+  // 生成对角线上的3个3x3方格
+  for (let i = 0; i < BOARD_SIZE; i += GRID_SIZE) {
+    const nums = Array.from({length: 9}, (_, i) => i + 1)
+      .sort(() => Math.random() - 0.5)
+    
+    for (let row = 0; row < GRID_SIZE; row++) {
+      for (let col = 0; col < GRID_SIZE; col++) {
+        board[i + row][i + col] = nums[row * GRID_SIZE + col]
+      }
+    }
+  }
+
+  // 解决剩余的格子
+  solveSudoku(board)
+  return board
+}
+
+// 根据难度移除数字
+function removeNumbers(board: Board, difficulty: Difficulty): Board {
+  const cellsToKeep = {
+    easy: 45,
+    medium: 35,
+    hard: 25
+  }
+
+  const result = board.map(row => [...row])
+  const positions = Array(BOARD_SIZE * BOARD_SIZE).fill(null)
+    .map((_, i) => [Math.floor(i / BOARD_SIZE), i % BOARD_SIZE] as Position)
+    .sort(() => Math.random() - 0.5)
+
+  let remainingCells = BOARD_SIZE * BOARD_SIZE
+  let index = 0
+
+  while (remainingCells > cellsToKeep[difficulty] && index < positions.length) {
+    const [row, col] = positions[index]
+    const temp = result[row][col]
+    result[row][col] = null
+
+    // 如果移除这个数字后不再是唯一解，就恢复它
+    if (!hasUniqueSolution(result)) {
+      result[row][col] = temp
+    } else {
+      remainingCells--
+    }
+    
+    index++
+  }
+
+  return result
+}
+
 // 解数独
 function solveSudoku(board: Board): boolean {
   const empty = findEmpty(board)
   if (!empty) return true
 
   const [row, col] = empty
-  for (let num = 1; num <= 9; num++) {
+  const nums = Array.from({length: 9}, (_, i) => i + 1)
+    .sort(() => Math.random() - 0.5) // 随机化数字顺序，使生成的数独更随机
+
+  for (const num of nums) {
     if (isValid(board, [row, col], num)) {
       board[row][col] = num
       if (solveSudoku(board)) return true
@@ -59,46 +146,6 @@ function solveSudoku(board: Board): boolean {
   }
 
   return false
-}
-
-// 生成完整的数独解决方案
-function generateSolution(): Board {
-  const board: Board = Array(BOARD_SIZE).fill(null)
-    .map(() => Array(BOARD_SIZE).fill(null))
-
-  // 随机填充一些初始数字
-  for (let i = 0; i < 3; i++) {
-    const num = Math.floor(Math.random() * 9) + 1
-    const row = Math.floor(Math.random() * 9)
-    const col = Math.floor(Math.random() * 9)
-    if (isValid(board, [row, col], num)) {
-      board[row][col] = num
-    }
-  }
-
-  solveSudoku(board)
-  return board
-}
-
-// 根据难度移除数字
-function removeNumbers(board: Board, difficulty: Difficulty): Board {
-  const numbersToRemove = {
-    easy: 30,
-    medium: 40,
-    hard: 50
-  }
-
-  const result = board.map(row => [...row])
-  const positions = Array(BOARD_SIZE * BOARD_SIZE).fill(null)
-    .map((_, i) => [Math.floor(i / BOARD_SIZE), i % BOARD_SIZE] as Position)
-    .sort(() => Math.random() - 0.5)
-
-  for (let i = 0; i < numbersToRemove[difficulty]; i++) {
-    const [row, col] = positions[i]
-    result[row][col] = null
-  }
-
-  return result
 }
 
 // 生成新游戏
