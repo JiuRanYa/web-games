@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { siteConfig } from '@/config/site'
 import { buttonVariants } from '@/components/ui/button'
@@ -11,32 +12,42 @@ export default async function IndexPage() {
 
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-
-      <div className="flex flex-col gap-4 py-12 my-12">
-        <div className="flex max-w-[980px] flex-col items-start gap-2">
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-            {t('title')}
-          </h1>
-          <p className="max-w-[700px] text-lg text-muted-foreground">
-            {t('description')}
-          </p>
+      <div className="relative flex flex-row items-center gap-8 py-12 my-12">
+        <div className="flex flex-col gap-4">
+          <div className="flex max-w-[980px] flex-col items-start gap-2">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+              {t('title')}
+            </h1>
+            <p className="max-w-[700px] text-lg text-muted-foreground">
+              {t('description')}
+            </p>
+          </div>
+          <div className="flex gap-4">
+            <Link
+              target="_blank"
+              rel="noreferrer"
+              href={siteConfig.links.github}
+              className={buttonVariants({ variant: 'outline' })}
+            >
+              {t('github')}
+            </Link>
+            <Link
+              href={'/games/2048'}
+              rel="noreferrer"
+              className={buttonVariants()}
+            >
+              {t('palynow')}
+            </Link>
+          </div>
         </div>
-        <div className="flex gap-4">
-          <Link
-            target="_blank"
-            rel="noreferrer"
-            href={siteConfig.links.github}
-            className={buttonVariants({ variant: 'outline' })}
-          >
-            {t('github')}
-          </Link>
-          <Link
-            href={'/games/2048'}
-            rel="noreferrer"
-            className={buttonVariants()}
-          >
-            {t('palynow')}
-          </Link>
+        <div className="hidden md:block absolute right-[15%]">
+          <Image
+            src="/game-controller.png"
+            alt="Game Controller"
+            width={220}
+            height={220}
+            priority
+          />
         </div>
       </div>
 
