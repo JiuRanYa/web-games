@@ -1,3 +1,5 @@
+import { NavItem } from '@/types/nav'
+
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
@@ -8,7 +10,7 @@ export const siteConfig = {
       title: 'Home',
       href: '/',
     },
-  ],
+  ] as NavItem[],
   links: {
     twitter: 'https://twitter.com/shadcn',
     github: 'https://github.com/shadcn/ui',
