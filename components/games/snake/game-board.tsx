@@ -24,6 +24,7 @@ export function GameBoard() {
   const [food, setFood] = useState<Position | null>(null)
   const lastDirectionRef = useRef<Direction>('right')
   const isMovingRef = useRef(false)
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const [gameStatus, setGameStatus] = useState<GameStatus>('idle')
   const [score, setScore] = useState(0)
 
@@ -146,49 +147,95 @@ export function GameBoard() {
     isMovingRef.current = false
   }, [gameStatus, snake, difficulty.boardSize, food, generateFood])
 
+  // 处理方向改变
+  const handleDirectionChange = useCallback((newDirection: Direction) => {
+    if (gameStatus !== 'playing' || isMovingRef.current) return
+
+    // 防止反向移动和对角线移动
+    const opposites = {
+      up: 'down',
+      down: 'up',
+      left: 'right',
+      right: 'left'
+    }
+    
+    // 检查是否是有效的方向改变
+    const isValidDirectionChange = () => {
+      const currentDir = lastDirectionRef.current
+      // 不允许反向移动
+      if (opposites[newDirection] === currentDir) return false
+      // 确保只能改变一个方向
+      if (currentDir === 'up' || currentDir === 'down') {
+        return newDirection === 'left' || newDirection === 'right'
+      }
+      if (currentDir === 'left' || currentDir === 'right') {
+        return newDirection === 'up' || newDirection === 'down'
+      }
+      return true
+    }
+
+    if (isValidDirectionChange()) {
+      isMovingRef.current = true
+      lastDirectionRef.current = newDirection
+    }
+  }, [gameStatus])
+
   // 键盘控制
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (gameStatus !== 'playing' || isMovingRef.current) return
-      
       const newDirection = DIRECTIONS[event.code]
       if (!newDirection) return
 
       // 阻止方向键和WASD键的默认行为
       event.preventDefault()
-
-      // 防止反向移动和对角线移动
-      const opposites = {
-        up: 'down',
-        down: 'up',
-        left: 'right',
-        right: 'left'
-      }
-      
-      // 检查是否是有效的方向改变
-      const isValidDirectionChange = () => {
-        const currentDir = lastDirectionRef.current
-        // 不允许反向移动
-        if (opposites[newDirection] === currentDir) return false
-        // 确保只能改变一个方向
-        if (currentDir === 'up' || currentDir === 'down') {
-          return newDirection === 'left' || newDirection === 'right'
-        }
-        if (currentDir === 'left' || currentDir === 'right') {
-          return newDirection === 'up' || newDirection === 'down'
-        }
-        return true
-      }
-
-      if (isValidDirectionChange()) {
-        isMovingRef.current = true
-        lastDirectionRef.current = newDirection
-      }
+      handleDirectionChange(newDirection)
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleDirectionChange])
+
+  // 触摸控制
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (gameStatus !== 'playing') return
+    
+    const touch = e.touches[0]
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY
+    }
   }, [gameStatus])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchStartRef.current || gameStatus !== 'playing') return
+    
+    const touch = e.touches[0]
+    const deltaX = touch.clientX - touchStartRef.current.x
+    const deltaY = touch.clientY - touchStartRef.current.y
+    
+    // 确保滑动距离足够长，避免误触
+    const minSwipeDistance = 30
+    if (Math.abs(deltaX) < minSwipeDistance && Math.abs(deltaY) < minSwipeDistance) return
+    
+    // 判断滑动方向
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // 水平滑动
+      handleDirectionChange(deltaX > 0 ? 'right' : 'left')
+    } else {
+      // 垂直滑动
+      handleDirectionChange(deltaY > 0 ? 'down' : 'up')
+    }
+    
+    // 重置触摸起点，允许连续滑动
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY
+    }
+  }, [gameStatus, handleDirectionChange])
+
+  const handleTouchEnd = useCallback(() => {
+    touchStartRef.current = null
+  }, [])
 
   // 游戏循环
   useEffect(() => {
@@ -230,6 +277,9 @@ export function GameBoard() {
           'rounded-lg bg-[#bbada0] p-3 md:p-4',
           'touch-none select-none'
         )}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {(gameStatus === 'gameover') && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg z-50">
