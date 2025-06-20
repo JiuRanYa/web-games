@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project
+
+这是一个在线的网页游戏合集
+
+## 项目结构
+
+```
+web-games/
+├── app/                # Next.js 应用目录
+│   ├── [locale]/      # 国际化路由
+│   └── games/         # 游戏页面
+│       ├── sudoku/    # 数独游戏
+│       └── 2048/      # 2048 游戏
+├── components/        # React 组件
+│   ├── ui/           # 通用 UI 组件
+│   └── games/        # 游戏相关组件
+│       ├── sudoku/   # 数独游戏组件
+│       └── 2048/     # 2048 游戏组件
+├── styles/           # 全局样式
+└── public/           # 静态资源
+```
+
+你需要总在components/games/下新增游戏，并且要考虑移动端的适配和SEO优化
+
+每当在app/[locale]下新增路由时，你应该根据语言来生成metadata
