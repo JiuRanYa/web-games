@@ -132,5 +132,25 @@
       "youWin": "胜利！",
       "restart": "重新开始"
     }
+  },
+  "snake": {
+    "title": "贪吃蛇",
+    "metadata": {
+      "title": "贪吃蛇 - 经典街机游戏",
+      "description": "经典贪吃蛇游戏，通过键盘控制蛇的移动方向，吃掉食物让蛇变得更长。考验你的反应能力和策略思维，享受这款永不过时的街机游戏！",
+      "keywords": "贪吃蛇, 贪吃蛇游戏, 经典贪吃蛇, 在线贪吃蛇, 街机游戏, 免费游戏, 网页游戏"
+    },
+    "game": {
+      "gameOver": "游戏结束",
+      "score": "得分",
+      "restart": "重新开始"
+    },
+    "controls": {
+      "selectDifficulty": "选择难度",
+      "start": "开始游戏",
+      "reset": "重置",
+      "score": "得分",
+      "controls": "使用方向键或WASD控制"
+    }
   }
 }

@@ -24,6 +24,10 @@
     "minesweeper": {
       "title": "Minesweeper",
       "description": "Classic minesweeper game. Use logic to find all mines without triggering them. Be careful where you click!"
+    },
+    "snake": {
+      "title": "Snake",
+      "description": "Classic arcade snake game. Control the snake to eat food and grow longer, but don't hit the walls or yourself!"
     }
   },
   "2048": {
@@ -126,6 +130,26 @@
       "gameOver": "Game Over!",
       "youWin": "You Win!",
       "restart": "Restart"
+    }
+  },
+  "snake": {
+    "title": "Snake",
+    "metadata": {
+      "title": "Snake - Classic Arcade Game",
+      "description": "Play the classic Snake game! Control the snake's direction using keyboard, eat food to grow longer. Test your reflexes and strategy in this timeless arcade game!",
+      "keywords": "snake game, classic snake, online snake, arcade game, free snake game, browser snake, retro game"
+    },
+    "game": {
+      "gameOver": "Game Over!",
+      "score": "Score",
+      "restart": "Restart"
+    },
+    "controls": {
+      "selectDifficulty": "Select Difficulty",
+      "start": "Start Game",
+      "reset": "Reset",
+      "score": "Score",
+      "controls": "Use arrow keys or WASD to control"
     }
   }
 }

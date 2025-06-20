@@ -23,5 +23,11 @@ export const games: Game[] = [
     title: '扫雷',
     image: '/images/games/minesweeper.jpg',
     link: '/games/minesweeper'
-  }
+  },
+  {
+    id: 'snake',
+    title: '贪吃蛇',
+    image: '/images/games/snake.jpg',
+    link: '/games/snake'
+  },
 ] 
