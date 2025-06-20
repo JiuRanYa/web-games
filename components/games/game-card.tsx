@@ -11,7 +11,7 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
   const t = useTranslations(`${game.id}.metadata`)
-  const gamesT = useTranslations('games')
+  const gamesT = useTranslations()
 
   return (
     <Link

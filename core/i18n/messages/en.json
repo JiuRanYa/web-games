@@ -12,24 +12,6 @@
     "name": "Play Hub",
     "description": "Web Game is a platform for playing games."
   },
-  "games": {
-    "2048": {
-      "title": "2048",
-      "description": "A simple and addictive number puzzle game. Slide and merge matching numbers to reach 2048!"
-    },
-    "sudoku": {
-      "title": "Sudoku",
-      "description": "Classic number puzzle game. Fill a 9x9 grid with numbers 1-9 so each row, column, and 3x3 box contains all digits."
-    },
-    "minesweeper": {
-      "title": "Minesweeper",
-      "description": "Classic minesweeper game. Use logic to find all mines without triggering them. Be careful where you click!"
-    },
-    "snake": {
-      "title": "Snake",
-      "description": "Classic arcade snake game. Control the snake to eat food and grow longer, but don't hit the walls or yourself!"
-    }
-  },
   "2048": {
     "metadata": {
       "title": "2048 - Number Puzzle Game",
@@ -37,6 +19,7 @@
       "keywords": "2048, 2048 game, 2048 google, 2048 online"
     },
     "title": "2048",
+    "description": "A simple and addictive number puzzle game. Slide and merge matching numbers to reach 2048!",
     "score": "Score",
     "restart": "Restart",
     "gameOver": "Game Over!",
@@ -107,6 +90,7 @@
   },
   "sudoku": {
     "title": "Sudoku",
+    "description": "Classic number puzzle game. Fill a 9x9 grid with numbers 1-9 so each row, column, and 3x3 box contains all digits.",
     "metadata": {
       "title": "Sudoku - Classic Number Puzzle",
       "description": "Challenge yourself with the classic Sudoku puzzle game. Fill the grid with numbers using logic and deduction. Multiple difficulty levels available!",
@@ -114,6 +98,8 @@
     }
   },
   "minesweeper": {
+    "title": "Minesweeper",
+    "description": "Classic minesweeper game. Use logic to find all mines without triggering them. Be careful where you click!",
     "metadata": {
       "title": "Minesweeper - Classic Puzzle Game",
       "description": "Play the classic Minesweeper game, featuring Google Doodle style gameplay. Test your logic and memory skills. Challenge yourself in this globally popular puzzle game!",
@@ -134,6 +120,7 @@
   },
   "snake": {
     "title": "Snake",
+    "description": "Classic arcade snake game. Control the snake to eat food and grow longer, but don't hit the walls or yourself!",
     "metadata": {
       "title": "Snake - Classic Arcade Game",
       "description": "Classic Snake game where you control the snake's direction to eat food and grow longer. Test your reflexes and strategic thinking in this timeless arcade game!",
