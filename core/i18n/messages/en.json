@@ -37,42 +37,66 @@
     "restart": "Restart",
     "gameOver": "Game Over!",
     "youWin": "You Win!",
+    "settings": {
+      "button": "Settings",
+      "title": "Game Settings",
+      "description": "Customize game difficulty and rules",
+      "difficulty": "Difficulty",
+      "difficultyDesc": "Choose preset difficulty or customize settings",
+      "selectDifficulty": "Select Difficulty",
+      "difficulties": {
+        "easy": "Easy",
+        "normal": "Normal",
+        "hard": "Hard",
+        "expert": "Expert",
+        "custom": "Custom"
+      },
+      "fourProbability": "4 Probability",
+      "fourProbabilityDesc": "Probability of generating 4 instead of 2 (0-1)",
+      "initialTiles": "Initial Tiles",
+      "initialTilesDesc": "Number of tiles at game start (1-6)",
+      "gridSize": "Grid Size",
+      "gridSizeDesc": "Size of the game grid (3-8)",
+      "winValue": "Win Value",
+      "winValueDesc": "Target number to win (128-16384)",
+      "save": "Save",
+      "resetToDefault": "Reset to Default"
+    },
     "accordion": {
       "rules": {
-        "title": "What are the rules?",
+        "title": "Game Rules",
         "content": [
-          "Move tiles on a 4x4 grid",
-          "When two tiles with the same number collide, they merge into their sum",
-          "After each move, a new tile (2 or 4) appears in an empty spot",
-          "Win by creating a tile with the number 2048",
-          "Game over when no more moves are possible"
+          "Use arrow keys to move tiles",
+          "Tiles with the same number merge when they collide",
+          "A new number appears after each move",
+          "Game ends when no moves are possible",
+          "Reach 2048 to win"
         ]
       },
       "controls": {
-        "title": "How to play?",
-        "description": "You can move tiles using:",
+        "title": "Controls",
+        "description": "Supported control methods:",
         "content": [
           "Arrow keys: ↑ ↓ ← →",
-          "WASD keys: W (up) S (down) A (left) D (right)",
-          "Touch devices: Swipe to control direction"
+          "WASD keys: W A S D",
+          "Mobile: Swipe screen"
         ]
       },
       "scoring": {
-        "title": "How is scoring calculated?",
+        "title": "Scoring Rules",
         "content": [
-          "Score points equal to the value of merged tiles",
-          "Example: 2+2=4, score 4 points",
-          "4+4=8, score 8 points",
-          "Points accumulate until game over"
+          "Score points when tiles merge",
+          "Points equal the merged number",
+          "Merge larger numbers for higher scores"
         ]
       },
       "strategy": {
-        "title": "Any tips?",
+        "title": "Game Tips",
         "content": [
-          "Keep your highest number in a corner",
-          "Keep large numbers together for easier merging",
-          "Avoid scattering small numbers across the board",
-          "Always keep one direction as an emergency exit"
+          "Keep large numbers in corners",
+          "Don't move tiles randomly",
+          "Maintain an organized grid",
+          "Plan merges carefully"
         ]
       }
     }
@@ -81,14 +105,14 @@
     "metadata": {
       "title": "Sudoku - Classic Number Puzzle",
       "description": "Challenge yourself with the classic Sudoku puzzle game. Fill the grid with numbers using logic and deduction. Multiple difficulty levels available!",
-      "keywords": "sudoku, nyt sudoku, sudoku online"
+      "keywords": "sudoku, sudoku puzzle, number game, logic game, brain game, free sudoku, online sudoku, daily sudoku, sudoku solver, classic sudoku"
     }
   },
   "minesweeper": {
     "metadata": {
       "title": "Minesweeper - Classic Puzzle Game",
       "description": "Play the classic Minesweeper game, featuring Google Doodle style gameplay. Test your logic and memory skills. Challenge yourself in this globally popular puzzle game!",
-      "keywords": "minesweeper, google doodle minesweeper"
+      "keywords": "minesweeper, minesweeper game, google minesweeper, online minesweeper, classic minesweeper, free minesweeper, browser minesweeper, puzzle game, logic game, strategy game"
     },
     "game": {
       "difficulty": "Difficulty",
