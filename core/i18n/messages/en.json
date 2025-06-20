@@ -81,14 +81,14 @@
     "metadata": {
       "title": "Sudoku - Classic Number Puzzle",
       "description": "Challenge yourself with the classic Sudoku puzzle game. Fill the grid with numbers using logic and deduction. Multiple difficulty levels available!",
-      "keywords": "sudoku, sudoku puzzle, number puzzle, logic game, brain game, free sudoku, online sudoku"
+      "keywords": "sudoku, nyt sudoku, sudoku online"
     }
   },
   "minesweeper": {
     "metadata": {
       "title": "Minesweeper - Classic Puzzle Game",
       "description": "Play the classic Minesweeper game, featuring Google Doodle style gameplay. Test your logic and memory skills. Challenge yourself in this globally popular puzzle game!",
-      "keywords": "minesweeper, minesweeper game, Google minesweeper, online minesweeper, classic minesweeper, free minesweeper, web minesweeper"
+      "keywords": "minesweeper, google doodle minesweeper"
     },
     "game": {
       "difficulty": "Difficulty",
