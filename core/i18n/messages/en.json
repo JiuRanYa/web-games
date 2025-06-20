@@ -57,5 +57,22 @@
         ]
       }
     }
+  },
+  "minesweeper": {
+    "metadata": {
+      "title": "Minesweeper - Classic Puzzle Game",
+      "description": "Play the classic Minesweeper game, featuring Google Doodle style gameplay. Test your logic and memory skills. Challenge yourself in this globally popular puzzle game!",
+      "keywords": "minesweeper, minesweeper game, Google minesweeper, online minesweeper, classic minesweeper, free minesweeper, web minesweeper"
+    },
+    "game": {
+      "difficulty": "Difficulty",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "expert": "Expert",
+      "remainingMines": "Mines",
+      "time": "Time",
+      "gameOver": "Game Over!",
+      "youWin": "You Win!"
+    }
   }
 }
