@@ -1,13 +1,19 @@
 import { GameBoard } from '@/components/games/sudoku/game-board'
+import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata = {
-  title: '数独游戏',
-  description: '数独游戏，让你在摸鱼的同时也能享受游戏的乐趣',
-  openGraph: {
-    title: '数独游戏',
-    description: '数独游戏，让你在摸鱼的同时也能享受游戏的乐趣',
-    images: ['/android-chrome-512x512.png'],
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('sudoku.metadata')
+  return {
+    title: t('title'),
+    description: t('description'),
+    keywords: t('keywords'),
+    openGraph: {
+      title: t('title'),
+      description: t('description'),
+      images: ['/images/games/sudoku.jpg'],
+    },
+  }
 }
 
 export default function SudokuPage() {

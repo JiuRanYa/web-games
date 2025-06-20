@@ -1,13 +1,19 @@
 import { GameBoard } from '@/components/games/2048/game-board'
+import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata = {
-  title: '2048 游戏',
-  description: '2048游戏，让你在摸鱼的同时也能享受游戏的乐趣',
-  openGraph: {
-    title: '2048',
-    description: '2048游戏，让你在摸鱼的同时也能享受游戏的乐趣',
-    images: ['/android-chrome-512x512.png'],
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('2048.metadata')
+  return {
+    title: t('title'),
+    description: t('description'),
+    keywords: t('keywords'),
+    openGraph: {
+      title: t('title'),
+      description: t('description'),
+      images: ['/images/games/2048.jpg'],
+    },
+  }
 }
 
 export default function Game2048Page() {
