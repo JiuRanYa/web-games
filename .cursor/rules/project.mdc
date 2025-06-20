@@ -3,33 +3,126 @@ description:
 globs: 
 alwaysApply: true
 ---
----
-description: 
-globs: 
-alwaysApply: true
----
-# Project
+# Web Games - 在线游戏合集
 
-这是一个在线的网页游戏合集
+这是一个使用 Next.js 构建的在线网页游戏合集，支持国际化和主题切换。
+
+## 技术栈
+
+- Next.js 15 - React 框架
+- TypeScript - 类型安全
+- Tailwind CSS - 样式解决方案
+- shadcn/ui - UI 组件库
+- i18next - 国际化解决方案
 
 ## 项目结构
 
 ```
 web-games/
-├── app/                # Next.js 应用目录
-│   ├── [locale]/      # 国际化路由
-│   └── games/         # 游戏页面
-│       ├── sudoku/    # 数独游戏
-│       └── 2048/      # 2048 游戏
-├── components/        # React 组件
-│   ├── ui/           # 通用 UI 组件
-│   └── games/        # 游戏相关组件
-│       ├── sudoku/   # 数独游戏组件
-│       └── 2048/     # 2048 游戏组件
-├── styles/           # 全局样式
-└── public/           # 静态资源
+├── app/                        # Next.js 应用目录
+│   ├── [locale]/              # 国际化路由
+│   │   ├── layout.tsx         # 布局组件
+│   │   ├── page.tsx           # 首页
+│   │   ├── not-found.tsx     # 404页面
+│   │   └── games/            # 游戏页面
+│   ├── robots.ts             # 搜索引擎爬虫配置
+│   └── sitemap.ts            # 站点地图配置
+│
+├── components/               # React 组件
+│   ├── ui/                  # 通用 UI 组件 (shadcn/ui)
+│   ├── site-header.tsx      # 网站头部组件
+│   ├── mobile-menu.tsx      # 移动端菜单
+│   ├── main-nav.tsx         # 主导航
+│   ├── theme-provider.tsx   # 主题提供者
+│   ├── language-switch.tsx  # 语言切换
+│   ├── icons.tsx           # 图标组件
+│   ├── theme-toggle.tsx    # 主题切换
+│   └── games/              # 游戏相关组件
+│       ├── sudoku/         # 数独游戏组件
+│       ├── 2048/          # 2048游戏组件
+│       └── minesweeper/    # 扫雷游戏组件
+│           ├── game-board.tsx    # 游戏主面板
+│           ├── game-controls.tsx # 游戏控制器
+│           ├── cell.tsx         # 单元格组件
+│           └── types.ts         # 类型定义
+│
+├── core/                    # 核心业务逻辑
+├── lib/                    # 工具函数库
+├── config/                 # 配置文件
+├── styles/                # 全局样式
+├── public/                # 静态资源
+│   ├── images/           # 图片资源
+│   ├── fonts/           # 字体资源
+│   └── locales/         # 国际化资源
+│
+├── messages/              # i18n 翻译文件
+├── types/                # 全局类型定义
+│
+├── middleware.ts         # Next.js 中间件
+├── next.config.ts       # Next.js 配置
+├── components.json      # shadcn/ui 配置
+├── postcss.config.mjs   # PostCSS 配置
+├── tsconfig.json        # TypeScript 配置
+├── eslint.config.mjs    # ESLint 配置
+└── package.json         # 项目依赖配置
 ```
 
-你需要总在components/games/下新增游戏，并且要考虑移动端的适配和SEO优化
+## 关键目录说明
 
-每当在app/[locale]下新增路由时，你应该根据语言来生成metadata
+### app/[locale]
+国际化路由目录，所有页面都在此目录下按语言进行组织。每个游戏都有其独立的路由目录。
+
+### components/games
+游戏组件目录，每个游戏都有其独立的组件目录，包含该游戏的所有相关组件。
+
+### components/ui
+通用 UI 组件目录，使用 shadcn/ui 构建的可复用组件。
+
+### public/locales
+国际化资源目录，包含不同语言的翻译文件。
+
+### styles
+全局样式目录，包含 Tailwind CSS 配置和全局样式定义。
+
+## 开发规范
+
+1. 游戏开发规范
+   - 所有游戏组件必须放在 `components/games/[游戏名]` 目录下
+   - 游戏路由必须放在 `app/[locale]/games/[游戏名]` 目录下
+   - 必须考虑移动端适配
+   - 必须支持 SEO 优化
+
+2. 国际化规范
+   - 所有文本必须使用 i18n
+   - 路由必须支持语言切换
+   - 必须为每个页面生成对应语言的 metadata
+
+3. 组件开发规范
+   - 使用 TypeScript 进行类型定义
+   - 遵循 React 最佳实践
+   - 确保组件的可复用性
+   - 使用 Tailwind CSS 进行样式开发
+
+4. 性能优化规范
+   - 实现适当的代码分割
+   - 优化图片和静态资源
+   - 实现适当的缓存策略
+   - 确保良好的加载性能
+
+## 构建和部署
+
+使用 pnpm 作为包管理工具：
+
+```bash
+# 安装依赖
+pnpm install
+
+# 开发环境运行
+pnpm dev
+
+# 构建生产版本
+pnpm build
+
+# 运行生产版本
+pnpm start
+```
