@@ -20,5 +20,12 @@ export const games: Game[] = [
     description: '经典的数字推理游戏，在9x9的格子中填入1-9的数字，让每行、每列和每个3x3的方格都包含1-9的数字。',
     image: '/images/games/sudoku.jpg',
     link: '/games/sudoku'
+  },
+  {
+    id: 'minesweeper',
+    title: '扫雷',
+    description: '经典的扫雷游戏，通过逻辑推理找出所有地雷的位置，小心不要踩到地雷！',
+    image: '/images/games/minesweeper.jpg',
+    link: '/games/minesweeper'
   }
 ] 
