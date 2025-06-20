@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -22,7 +22,8 @@ export function GameBoard() {
   const [board, setBoard] = useState<CellType[][]>([])
   const [snake, setSnake] = useState<Position[]>([...INITIAL_SNAKE])
   const [food, setFood] = useState<Position | null>(null)
-  const [direction, setDirection] = useState<Direction>('right')
+  const lastDirectionRef = useRef<Direction>('right')
+  const isMovingRef = useRef(false)
   const [gameStatus, setGameStatus] = useState<GameStatus>('idle')
   const [score, setScore] = useState(0)
 
@@ -56,7 +57,8 @@ export function GameBoard() {
     setBoard(newBoard)
     setSnake(initialSnake)
     setFood(newFood)
-    setDirection('right')
+    lastDirectionRef.current = 'right'
+    isMovingRef.current = false
     setGameStatus('idle')
     setScore(0)
   }, [initializeBoard, generateFood])
@@ -91,9 +93,10 @@ export function GameBoard() {
 
     const head = snake[0]
     const newHead: Position = { ...head }
+    const currentDirection = lastDirectionRef.current
 
     // 根据方向移动蛇头
-    switch (direction) {
+    switch (currentDirection) {
       case 'up':
         newHead.row--
         break
@@ -119,6 +122,12 @@ export function GameBoard() {
       return
     }
 
+    // 预先检查是否会撞到自己
+    if (snake.some(pos => pos.row === newHead.row && pos.col === newHead.col)) {
+      setGameStatus('gameover')
+      return
+    }
+
     const newSnake = [newHead]
 
     // 检查是否吃到食物
@@ -133,19 +142,14 @@ export function GameBoard() {
       newSnake.push(...snake.slice(0, -1))
     }
 
-    // 检查是否撞到自己（移到这里，因为我们需要先计算新的蛇身）
-    if (newSnake.slice(1).some(pos => pos.row === newHead.row && pos.col === newHead.col)) {
-      setGameStatus('gameover')
-      return
-    }
-
     setSnake(newSnake)
-  }, [gameStatus, snake, direction, difficulty.boardSize, food, generateFood])
+    isMovingRef.current = false
+  }, [gameStatus, snake, difficulty.boardSize, food, generateFood])
 
   // 键盘控制
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (gameStatus !== 'playing') return
+      if (gameStatus !== 'playing' || isMovingRef.current) return
       
       const newDirection = DIRECTIONS[event.code]
       if (!newDirection) return
@@ -153,21 +157,38 @@ export function GameBoard() {
       // 阻止方向键和WASD键的默认行为
       event.preventDefault()
 
-      // 防止反向移动
+      // 防止反向移动和对角线移动
       const opposites = {
         up: 'down',
         down: 'up',
         left: 'right',
         right: 'left'
       }
-      if (opposites[newDirection] !== direction) {
-        setDirection(newDirection)
+      
+      // 检查是否是有效的方向改变
+      const isValidDirectionChange = () => {
+        const currentDir = lastDirectionRef.current
+        // 不允许反向移动
+        if (opposites[newDirection] === currentDir) return false
+        // 确保只能改变一个方向
+        if (currentDir === 'up' || currentDir === 'down') {
+          return newDirection === 'left' || newDirection === 'right'
+        }
+        if (currentDir === 'left' || currentDir === 'right') {
+          return newDirection === 'up' || newDirection === 'down'
+        }
+        return true
+      }
+
+      if (isValidDirectionChange()) {
+        isMovingRef.current = true
+        lastDirectionRef.current = newDirection
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [gameStatus, direction])
+  }, [gameStatus])
 
   // 游戏循环
   useEffect(() => {
