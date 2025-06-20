@@ -52,7 +52,7 @@ export default function IndexPage() {
       </div> */}
 
       <div className="mt-12">
-        <h2 className="mb-6 text-2xl font-bold">游戏列表</h2>
+        <h1 className="mb-6 text-2xl font-bold">游戏列表</h1>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {games.map((game) => (
             <GameCard key={game.id} game={game} />

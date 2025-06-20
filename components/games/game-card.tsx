@@ -21,7 +21,7 @@ export function GameCard({ game }: GameCardProps) {
         />
       </div>
       <div className="p-2 sm:p-4">
-        <h3 className="text-base font-semibold sm:text-lg">{game.title}</h3>
+        <h2 className="text-base font-semibold sm:text-lg">{game.title}</h2>
         <p className="mt-1 text-xs text-muted-foreground sm:mt-2 sm:text-sm">{game.description}</p>
       </div>
     </Link>
