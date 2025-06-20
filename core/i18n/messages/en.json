@@ -124,7 +124,8 @@
       "remainingMines": "Mines",
       "time": "Time",
       "gameOver": "Game Over!",
-      "youWin": "You Win!"
+      "youWin": "You Win!",
+      "restart": "Restart"
     }
   }
 }

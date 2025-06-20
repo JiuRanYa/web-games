@@ -6,6 +6,7 @@ import { GameControls } from './game-controls'
 import { CellState, DIFFICULTIES, Difficulty, GameStatus } from './types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 
 export function GameBoard() {
   const [difficulty, setDifficulty] = useState<Difficulty>(DIFFICULTIES.beginner)
@@ -180,10 +181,20 @@ export function GameBoard() {
         }}
       >
         {(gameStatus === 'won' || gameStatus === 'lost') && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg z-50">
-            <div className="text-4xl font-bold text-white">
-              {gameStatus === 'won' ? '胜利！' : '游戏结束'}
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg z-50">
+            <div className="text-4xl font-bold text-white mb-4">
+              {gameStatus === 'won' ? t('game.youWin') : t('game.gameOver')}
             </div>
+            <div className="text-lg text-white mb-4">
+              {t('game.time')}: {Math.floor(timeElapsed / 60)}:{(timeElapsed % 60).toString().padStart(2, '0')}
+            </div>
+            <Button
+              onClick={resetGame}
+              variant="secondary"
+              className="bg-white hover:bg-gray-100"
+            >
+              {t('game.restart')}
+            </Button>
           </div>
         )}
         <div

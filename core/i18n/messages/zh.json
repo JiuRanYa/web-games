@@ -129,7 +129,8 @@
       "remainingMines": "剩余地雷",
       "time": "用时",
       "gameOver": "游戏结束",
-      "youWin": "胜利！"
+      "youWin": "胜利！",
+      "restart": "重新开始"
     }
   }
 }
