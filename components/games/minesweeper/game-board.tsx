@@ -5,6 +5,7 @@ import { Cell } from './cell'
 import { GameControls } from './game-controls'
 import { CellState, DIFFICULTIES, Difficulty, GameStatus } from './types'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
 export function GameBoard() {
   const [difficulty, setDifficulty] = useState<Difficulty>(DIFFICULTIES.beginner)
@@ -155,8 +156,11 @@ export function GameBoard() {
     setBoard(newBoard)
   }
 
+  const t = useTranslations('minesweeper')
+
   return (
     <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">{t('title')}</h1>
       <GameControls
         difficulty={difficulty}
         gameStatus={gameStatus}

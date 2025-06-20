@@ -19,7 +19,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function MinesweeperPage() {
   return (
     <div className="container flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-8">
-      <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">扫雷</h1>
       <GameBoard />
     </div>
   )

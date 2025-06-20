@@ -102,6 +102,7 @@
     }
   },
   "sudoku": {
+    "title": "Sudoku",
     "metadata": {
       "title": "Sudoku - Classic Number Puzzle",
       "description": "Challenge yourself with the classic Sudoku puzzle game. Fill the grid with numbers using logic and deduction. Multiple difficulty levels available!",
@@ -114,6 +115,7 @@
       "description": "Play the classic Minesweeper game, featuring Google Doodle style gameplay. Test your logic and memory skills. Challenge yourself in this globally popular puzzle game!",
       "keywords": "minesweeper, minesweeper game, google minesweeper, online minesweeper, classic minesweeper, free minesweeper, browser minesweeper, puzzle game, logic game, strategy game"
     },
+    "title": "Minesweeper",
     "game": {
       "difficulty": "Difficulty",
       "beginner": "Beginner",

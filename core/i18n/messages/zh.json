@@ -107,6 +107,7 @@
     }
   },
   "sudoku": {
+    "title": "数独",
     "metadata": {
       "title": "数独 - 经典数字游戏",
       "description": "挑战经典数独益智游戏。使用逻辑和推理填充数字网格。提供多种难度级别！",
@@ -114,6 +115,7 @@
     }
   },
   "minesweeper": {
+    "title": "扫雷",
     "metadata": {
       "title": "扫雷 - 经典益智游戏",
       "description": "经典扫雷游戏，Google Doodle同款玩法，考验你的逻辑思维和记忆力。快来挑战扫雷高手，享受这款风靡全球的益智游戏！",
