@@ -11,6 +11,7 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
   const t = useTranslations(`${game.id}.metadata`)
+  const gamesT = useTranslations('games')
 
   return (
     <Link
@@ -21,7 +22,7 @@ export function GameCard({ game }: GameCardProps) {
       <div className="relative aspect-[16/10] overflow-hidden rounded-md sm:aspect-video">
         <Image
           src={game.image}
-          alt={game.title}
+          alt={gamesT(`${game.id}.title`)}
           fill
           className="object-cover transition-transform group-hover:scale-105"
         />
@@ -31,9 +32,11 @@ export function GameCard({ game }: GameCardProps) {
           className="text-base font-semibold sm:text-lg"
           title={t('keywords')}
         >
-          {game.title}
+          {gamesT(`${game.id}.title`)}
         </h2>
-        <p className="mt-1 text-xs text-muted-foreground sm:mt-2 sm:text-sm">{game.description}</p>
+        <p className="mt-1 text-xs text-muted-foreground sm:mt-2 sm:text-sm">
+          {gamesT(`${game.id}.description`)}
+        </p>
       </div>
     </Link>
   )

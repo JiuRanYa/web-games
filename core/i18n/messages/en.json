@@ -12,6 +12,20 @@
     "name": "Play Hub",
     "description": "Web Game is a platform for playing games."
   },
+  "games": {
+    "2048": {
+      "title": "2048",
+      "description": "A simple and addictive number puzzle game. Slide and merge matching numbers to reach 2048!"
+    },
+    "sudoku": {
+      "title": "Sudoku",
+      "description": "Classic number puzzle game. Fill a 9x9 grid with numbers 1-9 so each row, column, and 3x3 box contains all digits."
+    },
+    "minesweeper": {
+      "title": "Minesweeper",
+      "description": "Classic minesweeper game. Use logic to find all mines without triggering them. Be careful where you click!"
+    }
+  },
   "2048": {
     "metadata": {
       "title": "2048 - Number Puzzle Game",
