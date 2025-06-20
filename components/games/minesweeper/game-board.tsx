@@ -161,7 +161,7 @@ export function GameBoard() {
 
   return (
     <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">{t('title')}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-white">{t('title')}</h1>
       <GameControls
         difficulty={difficulty}
         gameStatus={gameStatus}

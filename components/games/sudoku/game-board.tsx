@@ -235,14 +235,12 @@ export function GameBoard() {
               <Button
                 variant="outline"
                 onClick={() => setIsSettingsOpen(true)}
-                className="bg-white hover:bg-gray-100"
               >
                 新游戏
               </Button>
               <Button
                 variant="outline"
                 onClick={handleHint}
-                className="bg-white hover:bg-gray-100"
               >
                 提示
               </Button>
@@ -251,7 +249,6 @@ export function GameBoard() {
                 onMouseDown={() => setIsPreviewingSolution(true)}
                 onMouseUp={() => setIsPreviewingSolution(false)}
                 onMouseLeave={() => setIsPreviewingSolution(false)}
-                className="bg-white hover:bg-gray-100"
               >
                 查看答案
               </Button>
