@@ -187,10 +187,9 @@ export function GameBoard() {
   const t = useTranslations('snake')
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-white">
-        {t('title')}
-      </h1>
+    <div className="flex flex-col items-center gap-4 w-full min-h-screen p-4">
+      <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
+      
       <GameControls
         difficulty={difficulty}
         gameStatus={gameStatus}
@@ -206,7 +205,7 @@ export function GameBoard() {
           'touch-none select-none'
         )}
         style={{
-          maxWidth: `${difficulty.boardSize * 20}px`
+          maxWidth: `${difficulty.boardSize * 25}px`
         }}
       >
         {(gameStatus === 'gameover') && (

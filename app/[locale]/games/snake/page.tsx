@@ -12,5 +12,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function SnakePage() {
-  return <GameBoard />
-} 
+  return (
+    <div className="container flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-8">
+      <GameBoard />
+    </div>
+  )
+}

@@ -31,7 +31,7 @@ export function GameControls({
   const t = useTranslations('snake')
 
   return (
-    <div className="w-full max-w-sm mx-auto mb-8">
+    <div className="w-full max-w-sm mx-auto">
       <div className="flex items-center justify-between gap-4 mb-4">
         <Select
           value={difficulty.name}
@@ -62,9 +62,6 @@ export function GameControls({
       <div className="flex items-center justify-between">
         <div className="text-lg font-semibold">
           {t('controls.score')}: {score}
-        </div>
-        <div className="text-sm text-gray-500 dark:text-gray-400">
-          {t('controls.controls')}
         </div>
       </div>
     </div>
