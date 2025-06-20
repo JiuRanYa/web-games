@@ -37,9 +37,11 @@ export function GameCell({
   return (
     <div
       className={cn(
-        'relative flex items-center justify-center text-xl md:text-2xl',
-        'bg-[#f5e6d3] cursor-text',
+        'relative flex items-center justify-center',
+        'aspect-square text-xl md:text-2xl',
+        'bg-[#f5e6d3] cursor-pointer select-none',
         'border-[0.5px] border-gray-400',
+        'active:bg-orange-200 transition-colors duration-150',
         // 3x3区域边框
         isThickRight && 'border-r-2 border-r-gray-700',
         isThickBottom && 'border-b-2 border-b-gray-700',
@@ -52,7 +54,9 @@ export function GameCell({
         isFirstRow && isFirstCol && 'rounded-tl-lg',
         isFirstRow && isLastCol && 'rounded-tr-lg',
         isLastRow && isFirstCol && 'rounded-bl-lg',
-        isLastRow && isLastCol && 'rounded-br-lg'
+        isLastRow && isLastCol && 'rounded-br-lg',
+        // 触摸反馈
+        'touch-none'
       )}
       onClick={onClick}
     >
@@ -68,11 +72,12 @@ export function GameCell({
         </span>
       ) : (
         <span className={cn(
-          'font-medium transition-transform duration-1000',
+          'font-medium transition-transform duration-150',
           isError && 'text-red-500',
           isInitial && 'text-gray-900',
           !isInitial && !isError && 'text-blue-600',
-          isHint && 'animate-[scale_2s_ease-in-out]'
+          isHint && 'animate-[scale_2s_ease-in-out]',
+          isSelected && 'scale-110'
         )}>
           {value}
         </span>

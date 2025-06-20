@@ -1,24 +1,28 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { LeaderboardRecord, getLeaderboard } from './game-utils'
+import { LeaderboardRecord, getLeaderboard, Difficulty } from './game-utils'
 
-export function Leaderboard() {
+interface LeaderboardProps {
+  currentDifficulty: Difficulty
+}
+
+export function Leaderboard({ currentDifficulty }: LeaderboardProps) {
   const [records, setRecords] = useState<LeaderboardRecord[]>([])
 
   useEffect(() => {
     // 初始加载排行榜数据
-    setRecords(getLeaderboard())
+    setRecords(getLeaderboard().filter(record => record.difficulty === currentDifficulty))
 
     // 监听storage事件，当其他标签页更新排行榜时同步更新
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'sudoku-leaderboard') {
-        setRecords(getLeaderboard())
+        setRecords(getLeaderboard().filter(record => record.difficulty === currentDifficulty))
       }
     }
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)
-  }, [])
+  }, [currentDifficulty])
 
   // 格式化时间
   const formatTime = (seconds: number) => {
@@ -29,7 +33,10 @@ export function Leaderboard() {
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">排行榜</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
+        {currentDifficulty === 'easy' ? '简单' : currentDifficulty === 'medium' ? '中等' : '困难'}
+        模式排行榜
+      </h2>
       <div className="space-y-2">
         {records.map((record, index) => (
           <div
@@ -38,7 +45,6 @@ export function Leaderboard() {
           >
             <div className="flex items-center gap-2">
               <span className="font-bold text-gray-600">#{index + 1}</span>
-              <span className="text-sm text-gray-500">{record.difficulty}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="font-mono">{formatTime(record.timeInSeconds)}</span>
