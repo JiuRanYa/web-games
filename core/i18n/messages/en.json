@@ -13,6 +13,11 @@
     "description": "Web Game is a platform for playing games."
   },
   "2048": {
+    "metadata": {
+      "title": "2048 - Number Puzzle Game",
+      "description": "Play the addictive 2048 puzzle game! Combine numbers, reach 2048, and challenge your strategic thinking. A perfect blend of math and strategy.",
+      "keywords": "2048, 2048 game, number puzzle, math game, strategy game, brain game, free 2048, online 2048"
+    },
     "title": "2048",
     "score": "Score",
     "restart": "Restart",
@@ -56,6 +61,13 @@
           "Always keep one direction as an emergency exit"
         ]
       }
+    }
+  },
+  "sudoku": {
+    "metadata": {
+      "title": "Sudoku - Classic Number Puzzle",
+      "description": "Challenge yourself with the classic Sudoku puzzle game. Fill the grid with numbers using logic and deduction. Multiple difficulty levels available!",
+      "keywords": "sudoku, sudoku puzzle, number puzzle, logic game, brain game, free sudoku, online sudoku"
     }
   },
   "minesweeper": {
