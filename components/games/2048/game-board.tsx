@@ -2,7 +2,22 @@
 import { useState, useEffect, useCallback } from 'react'
 import { GameTile } from './game-tile'
 import { cn } from '@/lib/utils'
-import { initializeGame, move, generateNumber, canMove, hasWon, createEmptyGrid, Tile } from './game-utils'
+import {
+  initializeGame,
+  move,
+  generateNumber,
+  canMove,
+  hasWon,
+  createEmptyGrid,
+  Tile,
+  GameState,
+  saveGameState,
+  loadGameState,
+  clearGameState,
+  updateGameConfig,
+  GameConfig,
+  DEFAULT_GAME_CONFIG
+} from './game-utils'
 import { Button } from '@/components/ui/button'
 import {
   Accordion,
@@ -12,7 +27,6 @@ import {
 } from '@/components/ui/accordion'
 import { useTranslations } from 'next-intl'
 import { DifficultySettingsModal } from './difficulty-settings-modal'
-import { updateGameConfig, GameConfig, DEFAULT_GAME_CONFIG } from './game-utils'
 
 export interface GameBoardProps {
   className?: string
@@ -34,6 +48,33 @@ export function GameBoard({ className }: GameBoardProps) {
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false)
   const [currentConfig, setCurrentConfig] = useState<GameConfig>(DEFAULT_GAME_CONFIG)
 
+  // 保存游戏状态
+  const saveGame = useCallback(() => {
+    const gameState: GameState = {
+      grid,
+      score,
+      gameOver,
+      won
+    }
+    saveGameState(gameState)
+  }, [grid, score, gameOver, won])
+
+  // 在游戏状态改变时自动保存
+  useEffect(() => {
+    if (isInitialized) {
+      saveGame()
+    }
+  }, [grid, score, gameOver, won, isInitialized, saveGame])
+
+  // 在组件卸载时保存游戏状态
+  useEffect(() => {
+    return () => {
+      if (isInitialized) {
+        saveGame()
+      }
+    }
+  }, [isInitialized, saveGame])
+
   // 在客户端初始化游戏和配置
   useEffect(() => {
     if (!isInitialized) {
@@ -44,8 +85,17 @@ export function GameBoard({ className }: GameBoardProps) {
         setCurrentConfig(parsedConfig)
         updateGameConfig(parsedConfig)
       }
-      
-      setGrid(initializeGame())
+
+      // 检查是否有保存的游戏状态
+      const savedState = loadGameState()
+      if (savedState) {
+        setGrid(savedState.grid)
+        setScore(savedState.score)
+        setGameOver(savedState.gameOver)
+        setWon(savedState.won)
+      } else {
+        setGrid(initializeGame())
+      }
       setIsInitialized(true)
     }
   }, [isInitialized])
@@ -103,6 +153,7 @@ export function GameBoard({ className }: GameBoardProps) {
   }, [handleKeyDown])
 
   const resetGame = useCallback(() => {
+    clearGameState() // 清除保存的游戏状态
     const newGrid = initializeGame()
     setGrid(newGrid)
     setScore(0)

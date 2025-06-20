@@ -412,3 +412,80 @@ export function move(grid: (Tile | null)[][], direction: 'up' | 'down' | 'left' 
 
   return { grid: newGrid, score: totalScore, moved }
 }
+
+// 游戏状态接口
+export interface GameState {
+  grid: (Tile | null)[][];
+  score: number;
+  gameOver: boolean;
+  won: boolean;
+}
+
+// 保存游戏状态
+export function saveGameState(state: GameState): void {
+  try {
+    // 确保每个Tile对象都包含完整的属性
+    const processedGrid = state.grid.map(row =>
+      row.map(tile =>
+        tile ? {
+          ...tile,
+          isNew: false, // 保存时重置isNew状态
+          mergedFrom: undefined // 不保存合并状态
+        } : null
+      )
+    )
+    
+    const processedState = {
+      ...state,
+      grid: processedGrid
+    }
+    
+    localStorage.setItem('2048_game_state', JSON.stringify(processedState))
+  } catch (error) {
+    console.error('Failed to save game state:', error)
+  }
+}
+
+// 加载游戏状态
+export function loadGameState(): GameState | null {
+  try {
+    const savedState = localStorage.getItem('2048_game_state')
+    if (!savedState) return null
+
+    const state = JSON.parse(savedState)
+    
+    // 重新创建Tile对象，确保所有必要的属性都存在
+    const processedGrid = state.grid.map((row: (Tile | null)[], i: number) =>
+      row.map((tile, j) => {
+        if (!tile) return null
+        return {
+          id: tile.id || generateId(), // 如果没有id则生成新的
+          value: tile.value,
+          position: {
+            row: i,
+            col: j
+          },
+          isNew: false, // 加载时不显示为新块
+          mergedFrom: undefined // 清除合并状态
+        }
+      })
+    )
+
+    return {
+      ...state,
+      grid: processedGrid
+    }
+  } catch (error) {
+    console.error('Failed to load game state:', error)
+    return null
+  }
+}
+
+// 清除保存的游戏状态
+export function clearGameState(): void {
+  try {
+    localStorage.removeItem('2048_game_state')
+  } catch (error) {
+    console.error('Failed to clear game state:', error)
+  }
+}
