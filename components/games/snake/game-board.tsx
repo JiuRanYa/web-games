@@ -150,6 +150,9 @@ export function GameBoard() {
       const newDirection = DIRECTIONS[event.code]
       if (!newDirection) return
 
+      // 阻止方向键和WASD键的默认行为
+      event.preventDefault()
+
       // 防止反向移动
       const opposites = {
         up: 'down',
