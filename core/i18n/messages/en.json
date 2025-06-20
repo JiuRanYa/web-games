@@ -136,11 +136,11 @@
     "title": "Snake",
     "metadata": {
       "title": "Snake - Classic Arcade Game",
-      "description": "Play the classic Snake game! Control the snake's direction using keyboard, eat food to grow longer. Test your reflexes and strategy in this timeless arcade game!",
-      "keywords": "snake game, classic snake, online snake, arcade game, free snake game, browser snake, retro game"
+      "description": "Classic Snake game where you control the snake's direction to eat food and grow longer. Test your reflexes and strategic thinking in this timeless arcade game!",
+      "keywords": "snake game, classic snake, online snake, arcade game, free game, web game"
     },
     "game": {
-      "gameOver": "Game Over!",
+      "gameOver": "Game Over",
       "score": "Score",
       "restart": "Restart"
     },
@@ -150,6 +150,41 @@
       "reset": "Reset",
       "score": "Score",
       "controls": "Use arrow keys or WASD to control"
+    },
+    "accordion": {
+      "rules": {
+        "title": "Game Rules",
+        "content": {
+          "1": "Control the snake to eat food and grow longer",
+          "2": "Game ends if you hit a wall or your own body",
+          "3": "Snake's speed increases with difficulty",
+          "4": "Aim to achieve the highest score possible"
+        }
+      },
+      "controls": {
+        "title": "Controls",
+        "description": "Supported control methods:",
+        "content": {
+          "1": "Arrow keys: ↑ ↓ ← →",
+          "2": "WASD keys: W A S D",
+          "3": "Touch devices: Swipe to control direction"
+        }
+      },
+      "scoring": {
+        "title": "Scoring Rules",
+        "content": {
+          "1": "Earn 1 point for each food eaten",
+          "2": "Higher difficulty means faster movement and greater challenge"
+        }
+      },
+      "strategy": {
+        "title": "Game Tips",
+        "content": {
+          "1": "Keep a safe distance from walls and your body",
+          "2": "Plan your route ahead and avoid dead ends",
+          "3": "Stay calm at higher difficulties and control your movement rhythm"
+        }
+      }
     }
   }
 }

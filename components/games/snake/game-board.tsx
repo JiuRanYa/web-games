@@ -15,6 +15,7 @@ import {
   INITIAL_SNAKE,
   Position
 } from './types'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 export function GameBoard() {
   const [difficulty, setDifficulty] = useState<Difficulty>(DIFFICULTIES.easy)
@@ -187,8 +188,8 @@ export function GameBoard() {
   const t = useTranslations('snake')
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full min-h-screen p-4">
-      <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
+    <div className="flex flex-col items-center gap-8 w-full max-w-[500px]">
+      <h1 className="text-4xl font-bold">{t('title')}</h1>
       
       <GameControls
         difficulty={difficulty}
@@ -198,15 +199,13 @@ export function GameBoard() {
         onStart={() => setGameStatus('playing')}
         onReset={resetGame}
       />
+
       <div
         className={cn(
           'relative w-full aspect-square',
           'rounded-lg bg-[#bbada0] p-3 md:p-4',
           'touch-none select-none'
         )}
-        style={{
-          maxWidth: `${difficulty.boardSize * 25}px`
-        }}
       >
         {(gameStatus === 'gameover') && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg z-50">
@@ -245,6 +244,55 @@ export function GameBoard() {
             ))
           )}
         </div>
+      </div>
+
+      <div className="w-full">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="rules">
+            <AccordionTrigger>{t('accordion.rules.title')}</AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>{t('accordion.rules.content.1')}</li>
+                <li>{t('accordion.rules.content.2')}</li>
+                <li>{t('accordion.rules.content.3')}</li>
+                <li>{t('accordion.rules.content.4')}</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="controls">
+            <AccordionTrigger>{t('accordion.controls.title')}</AccordionTrigger>
+            <AccordionContent>
+              <p className="mb-2">{t('accordion.controls.description')}</p>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>{t('accordion.controls.content.1')}</li>
+                <li>{t('accordion.controls.content.2')}</li>
+                <li>{t('accordion.controls.content.3')}</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="scoring">
+            <AccordionTrigger>{t('accordion.scoring.title')}</AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>{t('accordion.scoring.content.1')}</li>
+                <li>{t('accordion.scoring.content.2')}</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="strategy">
+            <AccordionTrigger>{t('accordion.strategy.title')}</AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc pl-4 space-y-2">
+                <li>{t('accordion.strategy.content.1')}</li>
+                <li>{t('accordion.strategy.content.2')}</li>
+                <li>{t('accordion.strategy.content.3')}</li>
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   )

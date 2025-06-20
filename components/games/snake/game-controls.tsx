@@ -31,7 +31,7 @@ export function GameControls({
   const t = useTranslations('snake')
 
   return (
-    <div className="w-full max-w-sm mx-auto">
+    <div className="w-full">
       <div className="flex items-center justify-between gap-4 mb-4">
         <Select
           value={difficulty.name}
