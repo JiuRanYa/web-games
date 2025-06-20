@@ -205,6 +205,26 @@ export function GameBoard() {
 
   return (
     <div className="w-full">
+      {/* 游戏完成遮罩层 */}
+      {isComplete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
+            <div className="text-4xl font-bold text-center">
+              恭喜！你完成了数独！
+            </div>
+            <div className="text-lg text-gray-600">
+              用时：{Math.floor(timeInSeconds / 60)}:{(timeInSeconds % 60).toString().padStart(2, '0')}
+            </div>
+            <Button
+              onClick={() => setIsSettingsOpen(true)}
+              className="mt-4"
+            >
+              开始新游戏
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* 桌面端布局 */}
       <div className="hidden md:flex flex-col items-center gap-4 w-full p-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800">数独游戏</h1>
@@ -244,14 +264,6 @@ export function GameBoard() {
           </div>
 
           <div className="w-[500px] aspect-square">
-            {isComplete && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg z-50">
-                <div className="text-4xl font-bold text-white">
-                  恭喜！你完成了数独！
-                </div>
-              </div>
-            )}
-
             <div className="grid grid-cols-9 h-full w-full">
               {board.map((row, rowIndex) =>
                 row.map((cell, colIndex) => (
