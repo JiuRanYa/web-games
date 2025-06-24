@@ -17,7 +17,7 @@ interface RootLayoutProps {
 }
 
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const { locale } = params
+  const { locale } = await params
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://games.tool.tokyo'
 
   // 为每个语言生成备用链接
