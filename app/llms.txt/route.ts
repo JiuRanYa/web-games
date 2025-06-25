@@ -72,7 +72,7 @@ function generateLLMsContent(): string {
     owner: {
       name: 'PlayHub',
       url: baseUrl,
-      email: 'contact@games.tool.tokyo',
+      email: 'siyuantong7@gmail.com',
     },
     preferredFormat: {
       type: 'html',
