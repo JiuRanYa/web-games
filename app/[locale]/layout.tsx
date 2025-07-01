@@ -40,6 +40,9 @@ export async function generateMetadata({ params }: { params: { locale: string } 
     alternates: {
       languages: alternates,
       canonical: `${baseUrl}/${locale}`
+    },
+    verification: {
+      google: 'yVxpP1GBNYvJP0t8G7YlfMhiUXWOV1FTwgbtQeGKr08'
     }
   }
 }
