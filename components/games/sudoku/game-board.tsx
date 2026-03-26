@@ -9,7 +9,6 @@ import {
   generateGame,
   isGameComplete,
   isInitialNumber,
-  isValid,
   addLeaderboardRecord,
   solveSudoku
 } from './game-utils'
@@ -150,16 +149,12 @@ export function GameBoard() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
-  // 检查数字是否有效
+  // 检查数字是否与解答一致
   const isNumberValid = useCallback((row: number, col: number): boolean => {
     const value = board[row][col]
-    if (value === null) return true
-    const originalValue = board[row][col]
-    board[row][col] = null
-    const valid = isValid(board, [row, col], value)
-    board[row][col] = originalValue
-    return valid
-  }, [board])
+    if (value === null || !solution[row]?.[col]) return true
+    return value === solution[row][col]
+  }, [board, solution])
 
   // 添加提示功能
   const handleHint = useCallback(() => {
